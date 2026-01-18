@@ -6,60 +6,23 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 
 # Backlog v2 (Supabase + Auth + Sync + UI Theme)
 
-## EPIC 0 — Agent onboarding and repo health
+## ~~EPIC 0 — Agent onboarding and repo health~~ ✅ COMPLETE
 
-### 0.1 `chore: verify required docs present and linked`
+### ~~0.1 `chore: verify required docs present and linked`~~ ✅
 
-**Goal:** prevent drift
-**Acceptance:**
+### ~~0.2 `chore: install dependencies and lock toolchain`~~ ✅
 
-* Root contains: `SPEC.md`, `DECISIONS.md`, `AGENTS.md`, `DESIGN.md`, `notes.md`, `SECURITY.md`, `README.md`
-* README links to SPEC + DESIGN + AGENTS + DECISIONS
-* `.github/pull_request_template.md` exists
-
-### 0.2 `chore: install dependencies and lock toolchain`
-
-**Goal:** agents can run reliably
-**Acceptance:**
-
-* `npm ci` works
-* App boots: `npx expo start`
-* `npm run typecheck`, `npm run lint` succeed
-* `npm test` runs (can be empty suite initially)
-
-### 0.3 `chore: add env handling (.env.example + loading)`
-
-**Acceptance:**
-
-* `.env.example` includes Supabase URL + anon key
-* App fails fast with clear error if env missing (dev only)
-* No secrets committed
+### ~~0.3 `chore: add env handling (.env.example + loading)`~~ ✅
 
 ---
 
-## EPIC 1 — UI foundation (Theme + Layout primitives)
+## ~~EPIC 1 — UI foundation (Theme + Layout primitives)~~ ✅ COMPLETE
 
-### 1.1 `feat(ui): add theme.ts and styles.ts`
+### ~~1.1 `feat(ui): add theme.ts and styles.ts`~~ ✅
 
-**Acceptance:**
+### ~~1.2 `feat(ui): wire Home/Practice/PostPractice screens to navigation`~~ ✅
 
-* `src/ui/theme.ts` and `src/ui/styles.ts` exist (your latest)
-* Used by screens (no hardcoded colours in screens)
-
-### 1.2 `feat(ui): wire Home/Practice/PostPractice screens to navigation`
-
-**Acceptance:**
-
-* `HomeScreen`, `PracticeScreen`, `PostPracticeScreen` render with spacing and no clutter
-* All navigation paths work (Home → Practice → PostPractice → Home/Log/Map)
-
-### 1.3 `chore(ui): add minimal UI components (Card, ButtonText, Pill)`
-
-**Acceptance:**
-
-* Optional helpers under `src/ui/components/`
-* No new UI library
-* Reuse across screens (reduces duplication)
+### ~~1.3 `chore(ui): add minimal UI components (Card, ButtonText, Pill)`~~ ✅
 
 ---
 
