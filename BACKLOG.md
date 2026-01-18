@@ -192,14 +192,14 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 
 ## EPIC 9 — Sync (minimal, deterministic, secure)
 
-### 9.1 `feat(sync): add sync skeleton modules + sync_state repo`
+### 9.1 ✅ `feat(sync): add sync skeleton modules + sync_state repo`
 
 **Acceptance:**
 
 * `src/domain/sync/*` exists (engine + stubs)
 * `sync_state` local table used for `last_sync_at:*`
 
-### 9.2 `feat(sync): pull remote changes into SQLite (meaning_entries)`
+### 9.2 ✅ `feat(sync): pull remote changes into SQLite (meaning_entries)`
 
 **Acceptance:**
 
@@ -207,7 +207,7 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 * Upsert local by id
 * Respect `deleted_at`
 
-### 9.3 `feat(sync): push local changes to Supabase (meaning_entries)`
+### 9.3 ✅ `feat(sync): push local changes to Supabase (meaning_entries)`
 
 **Acceptance:**
 
@@ -215,11 +215,11 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 * Soft delete via `deleted_at`
 * No infinite loops
 
-### 9.4 `feat(sync): pull/push practice_sessions`
+### 9.4 ✅ `feat(sync): pull/push practice_sessions`
 
 **Acceptance:** same as entries
 
-### 9.5 `feat(sync): conflict rule (server newer wins by updated_at)`
+### 9.5 ✅ `feat(sync): conflict rule (server newer wins by updated_at)`
 
 **Acceptance:**
 

@@ -10,12 +10,16 @@ import {
   setSwappedPractice,
   hasSwappedToday 
 } from '../../domain/dailyPractice';
+import { useSyncOnForeground } from '../../domain/sync';
 import type { Practice } from '../../domain/models';
 
 export default function HomeScreen({ navigation }: any) {
   const [practice, setPractice] = useState<Practice | null>(null);
   const [loading, setLoading] = useState(true);
   const [canSwap, setCanSwap] = useState(true);
+
+  // Trigger sync on mount and foreground
+  useSyncOnForeground();
 
   const loadPractice = useCallback(async () => {
     setLoading(true);
