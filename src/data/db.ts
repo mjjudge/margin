@@ -1,46 +1,63 @@
 import * as SQLite from 'expo-sqlite';
 
-export const db = SQLite.openDatabase('attention_meaning.db');
+let db: SQLite.SQLiteDatabase | null = null;
 
-export function initDb() {
-  db.transaction(tx => {
-    tx.executeSql(`
-      CREATE TABLE IF NOT EXISTS practices (
-        id TEXT PRIMARY KEY NOT NULL,
-        title TEXT,
-        instruction TEXT,
-        mode TEXT,
-        difficulty INTEGER,
-        duration_seconds INTEGER,
-        contra_notes TEXT,
-        created_at TEXT,
-        updated_at TEXT
-      );
-    `);
+export async function getDb(): Promise<SQLite.SQLiteDatabase> {
+  if (!db) {
+    db = await SQLite.openDatabaseAsync('attention_meaning.db');
+  }
+  return db;
+}
 
-    tx.executeSql(`
-      CREATE TABLE IF NOT EXISTS practice_sessions (
-        id TEXT PRIMARY KEY NOT NULL,
-        practice_id TEXT,
-        started_at TEXT,
-        completed_at TEXT,
-        status TEXT,
-        user_rating TEXT,
-        notes TEXT,
-        created_at TEXT
-      );
-    `);
+export async function initDb(): Promise<void> {
+  const database = await getDb();
+  
+  await database.execAsync(`
+    CREATE TABLE IF NOT EXISTS practices (
+      id TEXT PRIMARY KEY NOT NULL,
+      title TEXT NOT NULL,
+      instruction TEXT NOT NULL,
+      mode TEXT NOT NULL,
+      difficulty INTEGER NOT NULL,
+      duration_seconds INTEGER,
+      contra_notes TEXT,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL
+    );
+  `);
 
-    tx.executeSql(`
-      CREATE TABLE IF NOT EXISTS meaning_entries (
-        id TEXT PRIMARY KEY NOT NULL,
-        category TEXT,
-        text TEXT,
-        tags TEXT,
-        time_of_day TEXT,
-        created_at TEXT,
-        updated_at TEXT
-      );
-    `);
-  });
+  await database.execAsync(`
+    CREATE TABLE IF NOT EXISTS practice_sessions (
+      id TEXT PRIMARY KEY NOT NULL,
+      practice_id TEXT NOT NULL,
+      started_at TEXT NOT NULL,
+      completed_at TEXT,
+      status TEXT NOT NULL,
+      user_rating TEXT,
+      notes TEXT,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL,
+      deleted_at TEXT
+    );
+  `);
+
+  await database.execAsync(`
+    CREATE TABLE IF NOT EXISTS meaning_entries (
+      id TEXT PRIMARY KEY NOT NULL,
+      category TEXT NOT NULL,
+      text TEXT,
+      tags TEXT NOT NULL DEFAULT '[]',
+      time_of_day TEXT,
+      created_at TEXT NOT NULL,
+      updated_at TEXT NOT NULL,
+      deleted_at TEXT
+    );
+  `);
+
+  await database.execAsync(`
+    CREATE TABLE IF NOT EXISTS sync_state (
+      key TEXT PRIMARY KEY NOT NULL,
+      value TEXT NOT NULL
+    );
+  `);
 }

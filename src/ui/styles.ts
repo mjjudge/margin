@@ -1,5 +1,5 @@
 // src/ui/styles.ts
-import { StyleSheet, Platform } from 'react-native';
+import { StyleSheet } from 'react-native';
 import { theme, Theme } from './theme';
 
 /**

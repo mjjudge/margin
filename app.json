@@ -1,0 +1,31 @@
+{
+  "expo": {
+    "name": "Margin",
+    "slug": "margin",
+    "version": "1.0.0",
+    "orientation": "portrait",
+    "icon": "./margin_logo.png",
+    "scheme": "margin",
+    "userInterfaceStyle": "light",
+    "newArchEnabled": true,
+    "splash": {
+      "image": "./margin_logo.png",
+      "resizeMode": "contain",
+      "backgroundColor": "#F6F4EF"
+    },
+    "ios": {
+      "supportsTablet": true,
+      "bundleIdentifier": "com.mjjudge.margin"
+    },
+    "android": {
+      "adaptiveIcon": {
+        "foregroundImage": "./margin_logo.png",
+        "backgroundColor": "#F6F4EF"
+      },
+      "package": "com.mjjudge.margin"
+    },
+    "plugins": [
+      "expo-sqlite"
+    ]
+  }
+}
