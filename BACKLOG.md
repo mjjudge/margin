@@ -49,22 +49,22 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 
 ---
 
-## EPIC 4 — Attention Gym flow (real sessions)
+## ~~EPIC 4 — Attention Gym flow (real sessions)~~ ✅ COMPLETE
 
-### 4.1 `feat(sessions): create PracticeSession on practice start`
-
-**Acceptance:**
-
-* Session row created with `status=started`
-* `started_at` saved
-
-### 4.2 `feat(sessions): complete / abandon updates session`
+### ~~4.1 `feat(sessions): create PracticeSession on practice start`~~ ✅
 
 **Acceptance:**
 
-* Finish → `completed_at`, `status=completed`
-* Exit/Back → `status=abandoned`
-* No praise language
+* ~~Session row created with `status=started`~~ ✅
+* ~~`started_at` saved~~ ✅
+
+### ~~4.2 `feat(sessions): complete / abandon updates session`~~ ✅
+
+**Acceptance:**
+
+* ~~Finish → `completed_at`, `status=completed`~~ ✅
+* ~~Exit/Back → `status=abandoned`~~ ✅
+* ~~No praise language~~ ✅
 
 ---
 

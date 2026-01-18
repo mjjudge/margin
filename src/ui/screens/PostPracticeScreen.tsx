@@ -1,8 +1,10 @@
-import { View, Text, Pressable } from 'react-native';
+import { View, Text } from 'react-native';
 import { styles } from '../styles';
-import { theme } from '../theme';
+import { Button, Spacer } from '../components';
 
-export default function PostPracticeScreen({ navigation }: any) {
+export default function PostPracticeScreen({ route, navigation }: any) {
+  const sessionId: string | undefined = route?.params?.sessionId;
+
   return (
     <View style={styles.screenPadded}>
       <View style={styles.content}>
@@ -14,23 +16,28 @@ export default function PostPracticeScreen({ navigation }: any) {
         <View style={styles.section}>
           <View style={styles.card}>
             <Text style={styles.title}>Next</Text>
-            <View style={styles.spacer6} />
+            <Spacer size="s6" />
 
-            <Pressable style={styles.buttonPrimary} onPress={() => navigation.navigate('LogMoment')} hitSlop={theme.hit.slop} android_ripple={{ color: theme.color.border }}>
-              <Text style={styles.buttonPrimaryText}>Log a moment</Text>
-            </Pressable>
+            <Button 
+              label="Log a moment" 
+              onPress={() => navigation.navigate('LogMoment', { sessionId })} 
+            />
 
-            <View style={styles.spacer4} />
+            <Spacer size="s4" />
 
-            <Pressable style={styles.buttonText} onPress={() => navigation.navigate('Home')} hitSlop={theme.hit.slop}>
-              <Text style={styles.buttonTextLabel}>Skip</Text>
-            </Pressable>
+            <Button 
+              label="Skip" 
+              variant="text" 
+              onPress={() => navigation.navigate('Home')} 
+            />
 
-            <View style={styles.spacer7} />
+            <Spacer size="s7" />
 
-            <Pressable style={styles.buttonText} onPress={() => navigation.navigate('Map')} hitSlop={theme.hit.slop}>
-              <Text style={styles.buttonTextLabel}>View map</Text>
-            </Pressable>
+            <Button 
+              label="View map" 
+              variant="text" 
+              onPress={() => navigation.navigate('Map')} 
+            />
           </View>
         </View>
 
