@@ -114,9 +114,9 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 
 ---
 
-## EPIC 7 — Supabase backend setup (schema + seed + RLS)
+## ~~EPIC 7 — Supabase backend setup (schema + seed + RLS)~~ ✅ COMPLETE
 
-### 7.1 `chore(backend): apply supabase schema migration (RLS)`
+### ~~7.1 `chore(backend): apply supabase schema migration (RLS)`~~ ✅
 
 **Acceptance:**
 
@@ -124,7 +124,7 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 * RLS enabled on user tables
 * Practices readable for authenticated users only (recommended)
 
-### 7.2 `chore(backend): seed practices into Supabase via migration`
+### ~~7.2 `chore(backend): seed practices into Supabase via migration`~~ ✅
 
 **Acceptance:**
 
@@ -132,7 +132,7 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 * Idempotent upsert
 * Clients cannot insert/update practices
 
-### 7.3 `test(security): verify RLS with two users`
+### ~~7.3 `test(security): verify RLS with two users`~~ ✅
 
 **Acceptance:**
 

@@ -84,3 +84,100 @@ This is not a formal security audit. It’s a working checklist.
 - User-initiated export only
 
 ---
+## RLS Verification Steps (EPIC 7.3)
+
+### Prerequisites
+1. Two test accounts created in Supabase Auth
+2. Each user has some sample data (meaning_entries, practice_sessions)
+
+### Test Procedure
+
+#### Step 1: Get access tokens for both users
+```sql
+-- In Supabase SQL Editor (or via client)
+-- User A logs in via app → obtain session.access_token
+-- User B logs in via app → obtain session.access_token
+```
+
+#### Step 2: Verify SELECT isolation
+Using Supabase client or REST API with User A's token:
+```javascript
+// As User A
+const { data, error } = await supabase
+  .from('meaning_entries')
+  .select('*');
+// Should only return User A's entries
+```
+
+Using User B's token:
+```javascript
+// As User B
+const { data, error } = await supabase
+  .from('meaning_entries')
+  .select('*');
+// Should only return User B's entries
+```
+
+**Expected:** Each user sees only their own data.
+
+#### Step 3: Verify INSERT with wrong user_id fails
+```javascript
+// As User A, attempt to insert with User B's user_id
+const { error } = await supabase
+  .from('meaning_entries')
+  .insert({
+    id: 'test-uuid',
+    user_id: 'user-b-uuid', // Wrong user!
+    category: 'meaningful',
+    tags: []
+  });
+// Should fail with RLS violation
+```
+
+**Expected:** Insert fails due to RLS policy.
+
+#### Step 4: Verify UPDATE on other user's row fails
+```javascript
+// As User A, attempt to update User B's entry
+const { error } = await supabase
+  .from('meaning_entries')
+  .update({ text: 'hacked' })
+  .eq('id', 'user-b-entry-id');
+// Should return 0 rows affected (RLS blocks)
+```
+
+**Expected:** No rows updated (silently blocked by RLS).
+
+#### Step 5: Verify DELETE on other user's row fails
+```javascript
+// As User A, attempt to delete User B's entry
+const { error } = await supabase
+  .from('meaning_entries')
+  .delete()
+  .eq('id', 'user-b-entry-id');
+// Should return 0 rows affected
+```
+
+**Expected:** No rows deleted.
+
+#### Step 6: Verify practices are read-only
+```javascript
+// As any authenticated user
+const { error } = await supabase
+  .from('practices')
+  .insert({ id: 'test', title: 'hack', instruction: 'x', mode: 'focus', difficulty: 1 });
+// Should fail (no insert policy)
+```
+
+**Expected:** Insert fails.
+
+### Results Log
+| Test | Expected | Result | Date | Tester |
+|------|----------|--------|------|--------|
+| SELECT isolation | Pass | | | |
+| INSERT wrong user | Fail | | | |
+| UPDATE other user | Blocked | | | |
+| DELETE other user | Blocked | | | |
+| Practices read-only | Pass | | | |
+
+---
