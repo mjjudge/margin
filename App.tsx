@@ -1,4 +1,10 @@
+import { AuthProvider } from './src/data/auth';
 import AppNavigator from './src/ui/navigation/AppNavigator';
+
 export default function App() {
-  return <AppNavigator />;
+  return (
+    <AuthProvider>
+      <AppNavigator />
+    </AuthProvider>
+  );
 }

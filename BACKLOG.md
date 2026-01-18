@@ -143,7 +143,7 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 
 ## EPIC 8 — Auth (Supabase, multi-provider)
 
-### 8.1 `feat(auth): add supabase client + session persistence`
+### 8.1 ✅ `feat(auth): add supabase client + session persistence`
 
 **Acceptance:**
 
@@ -151,7 +151,7 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 * Session persists across restart
 * No tokens logged
 
-### 8.2 `feat(auth-ui): Auth screen + gating`
+### 8.2 ✅ `feat(auth-ui): Auth screen + gating`
 
 **Acceptance:**
 
@@ -159,7 +159,7 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 * Logged in → App content
 * Logout works
 
-### 8.3 `feat(auth): Apple sign-in`
+### 8.3 ✅ `feat(auth): Apple sign-in`
 
 **Acceptance:**
 
@@ -167,11 +167,11 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 * Redirect returns to app
 * Session stored
 
-### 8.4 `feat(auth): Google sign-in`
+### 8.4 ✅ `feat(auth): Google sign-in`
 
 **Acceptance:** end-to-end working
 
-### 8.5 `feat(auth): Email sign-in (magic link or OTP)`
+### 8.5 ✅ `feat(auth): Email sign-in (magic link or OTP)`
 
 **Acceptance:** end-to-end working
 
@@ -180,7 +180,7 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 **Acceptance:** end-to-end working
 *(If provider choice is still open, treat as Facebook by default per DECISIONS.md.)*
 
-### 8.7 `chore(auth): deep link + redirect URL config`
+### 8.7 ✅ `chore(auth): deep link + redirect URL config`
 
 **Acceptance:**
 
