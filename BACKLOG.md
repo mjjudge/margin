@@ -36,16 +36,16 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 
 ---
 
-## EPIC 3 — “Today’s Practice” selection (deterministic)
+## ~~EPIC 3 — "Today's Practice" selection (deterministic)~~ ✅ COMPLETE
 
-### 3.1 `feat(domain): deterministic daily practice selection`
+### ~~3.1 `feat(domain): deterministic daily practice selection`~~ ✅
 
 **Acceptance:**
 
-* One practice per calendar day
-* Stable within a day
-* Swap once per day (optional if you want this now)
-* No streaks/progress
+* ~~One practice per calendar day~~ ✅
+* ~~Stable within a day~~ ✅
+* ~~Swap once per day (optional if you want this now)~~ ✅
+* ~~No streaks/progress~~ ✅
 
 ---
 
