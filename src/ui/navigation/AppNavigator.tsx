@@ -4,6 +4,7 @@ import { ActivityIndicator, View } from 'react-native';
 
 import { useAuth } from '../../data/auth';
 import { theme } from '../theme';
+import { ErrorBoundary } from '../components';
 
 import HomeScreen from '../screens/HomeScreen';
 import PracticeScreen from '../screens/PracticeScreen';
@@ -15,6 +16,29 @@ import SettingsScreen from '../screens/SettingsScreen';
 import AuthScreen from '../screens/AuthScreen';
 
 const Stack = createNativeStackNavigator();
+
+// Wrap screens with ErrorBoundary
+function withErrorBoundary<P extends object>(
+  WrappedComponent: React.ComponentType<P>,
+  _componentName: string
+) {
+  return function ScreenWithErrorBoundary(props: P) {
+    return (
+      <ErrorBoundary>
+        <WrappedComponent {...props} />
+      </ErrorBoundary>
+    );
+  };
+}
+
+const SafeHomeScreen = withErrorBoundary(HomeScreen, 'Home');
+const SafePracticeScreen = withErrorBoundary(PracticeScreen, 'Practice');
+const SafePostPracticeScreen = withErrorBoundary(PostPracticeScreen, 'PostPractice');
+const SafeLogMomentScreen = withErrorBoundary(LogMomentScreen, 'LogMoment');
+const SafeMapScreen = withErrorBoundary(MapScreen, 'Map');
+const SafeEntriesScreen = withErrorBoundary(EntriesScreen, 'Entries');
+const SafeSettingsScreen = withErrorBoundary(SettingsScreen, 'Settings');
+const SafeAuthScreen = withErrorBoundary(AuthScreen, 'Auth');
 
 function LoadingScreen() {
   return (
@@ -41,17 +65,17 @@ export default function AppNavigator() {
         {session ? (
           // Authenticated routes
           <>
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Practice" component={PracticeScreen} />
-            <Stack.Screen name="PostPractice" component={PostPracticeScreen} />
-            <Stack.Screen name="LogMoment" component={LogMomentScreen} />
-            <Stack.Screen name="Map" component={MapScreen} />
-            <Stack.Screen name="Entries" component={EntriesScreen} />
-            <Stack.Screen name="Settings" component={SettingsScreen} />
+            <Stack.Screen name="Home" component={SafeHomeScreen} />
+            <Stack.Screen name="Practice" component={SafePracticeScreen} />
+            <Stack.Screen name="PostPractice" component={SafePostPracticeScreen} />
+            <Stack.Screen name="LogMoment" component={SafeLogMomentScreen} />
+            <Stack.Screen name="Map" component={SafeMapScreen} />
+            <Stack.Screen name="Entries" component={SafeEntriesScreen} />
+            <Stack.Screen name="Settings" component={SafeSettingsScreen} />
           </>
         ) : (
           // Unauthenticated routes
-          <Stack.Screen name="Auth" component={AuthScreen} />
+          <Stack.Screen name="Auth" component={SafeAuthScreen} />
         )}
       </Stack.Navigator>
     </NavigationContainer>

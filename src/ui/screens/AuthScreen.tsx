@@ -6,6 +6,7 @@ import {
   ScrollView, 
   Alert,
   Platform,
+  Image,
 } from 'react-native';
 import { styles } from '../styles';
 import { theme } from '../theme';
@@ -16,6 +17,10 @@ import { supabase } from '../../data/supabaseClient';
 
 // Required for OAuth on native
 WebBrowser.maybeCompleteAuthSession();
+
+// Logo - kept subtle
+// eslint-disable-next-line @typescript-eslint/no-require-imports
+const Logo = require('../assets/margin_logo.png');
 
 export default function AuthScreen() {
   const { signInWithEmail, loading } = useAuth();
@@ -118,7 +123,17 @@ export default function AuthScreen() {
       contentContainerStyle={{ padding: theme.layout.screenPaddingX }}
     >
       <View style={styles.content}>
-        <View style={styles.section}>
+        <View style={[styles.section, { alignItems: 'center' }]}>
+          <Image 
+            source={Logo} 
+            style={{ 
+              width: 64, 
+              height: 64, 
+              opacity: 0.8,
+              marginBottom: theme.space.s4,
+            }} 
+            resizeMode="contain"
+          />
           <Text style={styles.h2}>Sign in to Margin</Text>
           <Spacer size="s4" />
           <Text style={styles.body2}>

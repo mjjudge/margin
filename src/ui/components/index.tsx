@@ -5,3 +5,4 @@ export { Card } from './Card';
 export { Button } from './Button';
 export { Pill } from './Pill';
 export { Spacer } from './Spacer';
+export { ErrorBoundary } from './ErrorBoundary';

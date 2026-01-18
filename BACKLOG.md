@@ -238,11 +238,11 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 
 ## EPIC 10 — Export & release hygiene
 
-### 10.1 `feat(export): user-initiated JSON export (local cache)`
+### 10.1 ✅ `feat(export): user-initiated JSON export (local cache)`
 
 **Acceptance:** exports practices/sessions/entries from SQLite
 
-### 10.2 `chore: add basic error boundaries + safe logging`
+### 10.2 ✅ `chore: add basic error boundaries + safe logging`
 
 **Acceptance:**
 
