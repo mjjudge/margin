@@ -1,6 +1,7 @@
 import * as SQLite from 'expo-sqlite';
 
 let db: SQLite.SQLiteDatabase | null = null;
+let initialized = false;
 
 export async function getDb(): Promise<SQLite.SQLiteDatabase> {
   if (!db) {
@@ -60,4 +61,24 @@ export async function initDb(): Promise<void> {
       value TEXT NOT NULL
     );
   `);
+}
+
+/**
+ * Bootstrap the database: init schema + seed practices
+ * Safe to call multiple times (idempotent)
+ */
+export async function bootstrapDb(): Promise<void> {
+  if (initialized) return;
+  
+  await initDb();
+  
+  // Lazy import to avoid circular dependency
+  const { seedPractices, needsSeeding } = await import('./seedPractices');
+  
+  if (await needsSeeding()) {
+    const result = await seedPractices();
+    console.log(`[DB] Seeded ${result.seeded} practices`);
+  }
+  
+  initialized = true;
 }

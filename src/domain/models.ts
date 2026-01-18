@@ -26,6 +26,8 @@ export interface PracticeSession {
   user_rating?: 'easy' | 'neutral' | 'hard';
   notes?: string;
   created_at: string;
+  updated_at: string;
+  deleted_at?: string;
 }
 
 export type MeaningCategory =
@@ -42,4 +44,5 @@ export interface MeaningEntry {
   time_of_day?: 'morning' | 'afternoon' | 'evening' | 'night';
   created_at: string;
   updated_at: string;
+  deleted_at?: string;
 }

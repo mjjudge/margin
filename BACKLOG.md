@@ -26,32 +26,13 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 
 ---
 
-## EPIC 2 — Local DB (SQLite cache) + repos
+## ~~EPIC 2 — Local DB (SQLite cache) + repos~~ ✅ COMPLETE
 
-### 2.1 `feat(data): create SQLite schema incl. sync_state`
+### ~~2.1 `feat(data): create SQLite schema incl. sync_state`~~ ✅
 
-**Acceptance:**
+### ~~2.2 `feat(data): implement repos (practicesRepo, sessionsRepo, meaningRepo)`~~ ✅
 
-* Tables: `practices`, `practice_sessions`, `meaning_entries`, `sync_state`
-* Tags stored as JSON string locally
-* DB init is idempotent
-
-### 2.2 `feat(data): implement repos (practicesRepo, sessionsRepo, meaningRepo)`
-
-**Acceptance:**
-
-* CRUD for sessions + meaning entries
-* Practices read methods
-* No derived data stored
-* Unit tests for basic CRUD if feasible
-
-### 2.3 `feat(data): seed practices into SQLite on first run`
-
-**Acceptance:**
-
-* Loads from `src/content/practices.seed.json`
-* Idempotent (no duplicates)
-* Works offline
+### ~~2.3 `feat(data): seed practices into SQLite on first run`~~ ✅
 
 ---
 
