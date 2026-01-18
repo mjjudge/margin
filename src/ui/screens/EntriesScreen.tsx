@@ -14,20 +14,32 @@ const CATEGORY_LABELS: Record<string, string> = {
   empty_numb: 'Empty / numbed',
 };
 
-export default function EntriesScreen({ navigation }: any) {
+export default function EntriesScreen({ route, navigation }: any) {
+  // Optional filter by tags (from cluster tap on Map)
+  const filterTags: string[] | undefined = route?.params?.filterTags;
+
   const [entries, setEntries] = useState<MeaningEntry[]>([]);
   const [loading, setLoading] = useState(true);
 
   const loadEntries = useCallback(async () => {
     try {
-      const data = await meaningRepo.getAll();
+      let data = await meaningRepo.getAll();
+      
+      // Apply tag filter if provided
+      if (filterTags && filterTags.length > 0) {
+        data = data.filter(entry => {
+          const entryTagsLower = entry.tags.map(t => t.toLowerCase().trim());
+          return filterTags.every(tag => entryTagsLower.includes(tag.toLowerCase()));
+        });
+      }
+      
       setEntries(data);
     } catch (err) {
       console.error('[EntriesScreen] Failed to load entries:', err);
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [filterTags]);
 
   // Reload when screen comes into focus
   useFocusEffect(
@@ -124,14 +136,28 @@ export default function EntriesScreen({ navigation }: any) {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.h2}>Entries</Text>
-          <Text style={styles.body2}>Everything you've logged.</Text>
+          <Text style={styles.h2}>{filterTags ? 'Filtered Entries' : 'Entries'}</Text>
+          <Text style={styles.body2}>
+            {filterTags 
+              ? `Showing entries with: ${filterTags.map(t => `#${t}`).join(', ')}`
+              : "Everything you've logged."}
+          </Text>
+          {filterTags && (
+            <>
+              <Spacer size="s3" />
+              <Button 
+                label="Clear filter" 
+                variant="text" 
+                onPress={() => navigation.setParams({ filterTags: undefined })} 
+              />
+            </>
+          )}
         </View>
 
         {entries.length === 0 ? (
           <View style={styles.section}>
             <Card>
-              <Text style={styles.body2}>No entries yet.</Text>
+              <Text style={styles.body2}>{filterTags ? 'No entries match this filter.' : 'No entries yet.'}</Text>
               <Spacer size="s4" />
               <Button label="Log a moment" onPress={() => navigation.navigate('LogMoment')} />
             </Card>

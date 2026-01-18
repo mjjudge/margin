@@ -89,23 +89,23 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 
 ---
 
-## EPIC 6 — Map logic (deterministic + testable)
+## ~~EPIC 6 — Map logic (deterministic + testable)~~ ✅ COMPLETE
 
-### 6.1 `feat(map): implement mapStats (tag counts + net_meaning)`
+### ~~6.1 `feat(map): implement mapStats (tag counts + net_meaning)`~~ ✅
 
 **Acceptance:**
 
 * Matches SPEC section 7
 * Deterministic unit tests
 
-### 6.2 `feat(map): implement clustering (Jaccard threshold 0.3)`
+### ~~6.2 `feat(map): implement clustering (Jaccard threshold 0.3)`~~ ✅
 
 **Acceptance:**
 
 * Deterministic clusters (max 5)
 * Unit tests with known fixtures
 
-### 6.3 `feat(ui): Map screen renders top tags + clusters`
+### ~~6.3 `feat(ui): Map screen renders top tags + clusters`~~ ✅
 
 **Acceptance:**
 
