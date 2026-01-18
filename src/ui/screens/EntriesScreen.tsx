@@ -1,7 +1,10 @@
-import { View, Text, Pressable, FlatList } from 'react-native';
+import { useState, useCallback } from 'react';
+import { View, Text, Pressable, FlatList, Alert, ActivityIndicator } from 'react-native';
+import { useFocusEffect } from '@react-navigation/native';
 import { styles } from '../styles';
 import { theme } from '../theme';
 import { Card, Button, Pill, Spacer } from '../components';
+import { meaningRepo } from '../../data/repos/meaningRepo';
 import type { MeaningEntry } from '../../domain/models';
 
 const CATEGORY_LABELS: Record<string, string> = {
@@ -12,8 +15,58 @@ const CATEGORY_LABELS: Record<string, string> = {
 };
 
 export default function EntriesScreen({ navigation }: any) {
-  // TODO: Load from meaningRepo
-  const entries: MeaningEntry[] = [];
+  const [entries, setEntries] = useState<MeaningEntry[]>([]);
+  const [loading, setLoading] = useState(true);
+
+  const loadEntries = useCallback(async () => {
+    try {
+      const data = await meaningRepo.getAll();
+      setEntries(data);
+    } catch (err) {
+      console.error('[EntriesScreen] Failed to load entries:', err);
+    } finally {
+      setLoading(false);
+    }
+  }, []);
+
+  // Reload when screen comes into focus
+  useFocusEffect(
+    useCallback(() => {
+      loadEntries();
+    }, [loadEntries])
+  );
+
+  const handleEdit = (entry: MeaningEntry) => {
+    navigation.navigate('LogMoment', {
+      entryId: entry.id,
+      category: entry.category,
+      text: entry.text,
+      tags: entry.tags,
+    });
+  };
+
+  const handleDelete = (entry: MeaningEntry) => {
+    Alert.alert(
+      'Delete entry?',
+      'This will remove the entry from your log.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete',
+          style: 'destructive',
+          onPress: async () => {
+            try {
+              await meaningRepo.delete(entry.id);
+              setEntries(prev => prev.filter(e => e.id !== entry.id));
+            } catch (err) {
+              console.error('[EntriesScreen] Delete failed:', err);
+              Alert.alert('Error', 'Failed to delete entry.');
+            }
+          },
+        },
+      ]
+    );
+  };
 
   const renderEntry = ({ item }: { item: MeaningEntry }) => (
     <Card style={{ marginBottom: theme.space.s4 }}>
@@ -39,8 +92,27 @@ export default function EntriesScreen({ navigation }: any) {
           </View>
         </>
       )}
+      <Spacer size="s4" />
+      <View style={{ flexDirection: 'row', gap: theme.space.s3 }}>
+        <Pressable onPress={() => handleEdit(item)} hitSlop={theme.hit.slop}>
+          <Text style={styles.link}>Edit</Text>
+        </Pressable>
+        <Pressable onPress={() => handleDelete(item)} hitSlop={theme.hit.slop}>
+          <Text style={[styles.link, { color: theme.color.text3 }]}>Delete</Text>
+        </Pressable>
+      </View>
     </Card>
   );
+
+  if (loading) {
+    return (
+      <View style={[styles.screenPadded, { justifyContent: 'center', alignItems: 'center' }]}>
+        <ActivityIndicator size="large" color={theme.color.accent} />
+        <Spacer size="s4" />
+        <Text style={styles.body2}>Loading entries...</Text>
+      </View>
+    );
+  }
 
   return (
     <View style={styles.screenPadded}>

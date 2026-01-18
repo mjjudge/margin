@@ -68,9 +68,9 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 
 ---
 
-## EPIC 5 — Meaning logging (CRUD, tags, UX)
+## ~~EPIC 5 — Meaning logging (CRUD, tags, UX)~~ ✅ COMPLETE
 
-### 5.1 `feat(entries): implement LogMoment screen with category/text/tags`
+### ~~5.1 `feat(entries): implement LogMoment screen with category/text/tags`~~ ✅
 
 **Acceptance:**
 
@@ -79,7 +79,7 @@ You can copy/paste these into GitHub Issues. Titles are intentionally “commit-
 * Tags optional (chip list from comma-separated input is fine)
 * Save writes to SQLite
 
-### 5.2 `feat(entries): Entries screen list + edit/delete (soft delete locally)`
+### ~~5.2 `feat(entries): Entries screen list + edit/delete (soft delete locally)`~~ ✅
 
 **Acceptance:**
 

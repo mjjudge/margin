@@ -1,8 +1,9 @@
 import { useState } from 'react';
-import { View, Text, TextInput, Pressable, ScrollView } from 'react-native';
+import { View, Text, TextInput, Pressable, ScrollView, Alert } from 'react-native';
 import { styles } from '../styles';
 import { theme } from '../theme';
 import { Card, Button, Spacer } from '../components';
+import { meaningRepo } from '../../data/repos/meaningRepo';
 import type { MeaningCategory } from '../../domain/models';
 
 const CATEGORIES: { key: MeaningCategory; label: string }[] = [
@@ -12,22 +13,43 @@ const CATEGORIES: { key: MeaningCategory; label: string }[] = [
   { key: 'empty_numb', label: 'Empty / numbed' },
 ];
 
-export default function LogMomentScreen({ navigation }: any) {
-  const [category, setCategory] = useState<MeaningCategory | null>(null);
-  const [text, setText] = useState('');
-  const [tagsInput, setTagsInput] = useState('');
+export default function LogMomentScreen({ route, navigation }: any) {
+  // Support edit mode if entryId passed
+  const entryId: string | undefined = route?.params?.entryId;
+  const initialCategory: MeaningCategory | undefined = route?.params?.category;
+  const initialText: string | undefined = route?.params?.text;
+  const initialTags: string[] | undefined = route?.params?.tags;
 
-  const canSave = category !== null;
+  const [category, setCategory] = useState<MeaningCategory | null>(initialCategory ?? null);
+  const [text, setText] = useState(initialText ?? '');
+  const [tagsInput, setTagsInput] = useState(initialTags?.join(', ') ?? '');
+  const [saving, setSaving] = useState(false);
 
-  const handleSave = () => {
-    if (!canSave) return;
-    // TODO: Save to repo
-    const tags = tagsInput
-      .split(',')
-      .map(t => t.trim().toLowerCase())
-      .filter(Boolean);
-    console.log('Saving entry:', { category, text, tags });
-    navigation.navigate('Home');
+  const isEdit = Boolean(entryId);
+  const canSave = category !== null && !saving;
+
+  const handleSave = async () => {
+    if (!canSave || !category) return;
+    
+    setSaving(true);
+    try {
+      const tags = tagsInput
+        .split(',')
+        .map(t => t.trim().toLowerCase())
+        .filter(Boolean);
+
+      if (isEdit && entryId) {
+        await meaningRepo.update(entryId, { category, text: text || undefined, tags });
+      } else {
+        await meaningRepo.create({ category, text: text || undefined, tags });
+      }
+      navigation.navigate('Home');
+    } catch (err) {
+      console.error('[LogMomentScreen] Save failed:', err);
+      Alert.alert('Error', 'Failed to save entry. Please try again.');
+    } finally {
+      setSaving(false);
+    }
   };
 
   return (
@@ -40,7 +62,7 @@ export default function LogMomentScreen({ navigation }: any) {
         </View>
 
         <View style={styles.section}>
-          <Text style={styles.h2}>Log a moment</Text>
+          <Text style={styles.h2}>{isEdit ? 'Edit entry' : 'Log a moment'}</Text>
           <Text style={styles.body2}>What showed up today? Category required, everything else optional.</Text>
         </View>
 
@@ -114,7 +136,7 @@ export default function LogMomentScreen({ navigation }: any) {
         </View>
 
         <View style={styles.section}>
-          <Button label="Save" onPress={handleSave} disabled={!canSave} />
+          <Button label={saving ? 'Saving...' : (isEdit ? 'Update' : 'Save')} onPress={handleSave} disabled={!canSave} />
           <Spacer size="s4" />
           <Button label="Cancel" variant="text" onPress={() => navigation.goBack()} />
         </View>
