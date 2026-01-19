@@ -23,7 +23,8 @@ describe('logger', () => {
     jest.restoreAllMocks();
   });
 
-  // Import after mocking
+  // Import after mocking - require() is needed for Jest module mocking pattern
+  // eslint-disable-next-line @typescript-eslint/no-require-imports
   const getLogger = () => require('../../utils/logger').logger;
 
   describe('sanitization', () => {
