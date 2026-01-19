@@ -1,8 +1,9 @@
-import { useState } from 'react';
-import { View, Text, TextInput, Pressable, ScrollView, Alert } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, Text, TextInput, Pressable, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '../styles';
 import { theme } from '../theme';
-import { Card, Button, Spacer } from '../components';
+import { Card, Spacer, Pill } from '../components';
 import { meaningRepo } from '../../data/repos/meaningRepo';
 import type { MeaningCategory } from '../../domain/models';
 
@@ -24,6 +25,29 @@ export default function LogMomentScreen({ route, navigation }: any) {
   const [text, setText] = useState(initialText ?? '');
   const [tagsInput, setTagsInput] = useState(initialTags?.join(', ') ?? '');
   const [saving, setSaving] = useState(false);
+  const [existingTags, setExistingTags] = useState<string[]>([]);
+
+  // Load existing tags for suggestions
+  useEffect(() => {
+    meaningRepo.getTagCounts().then(tagCounts => {
+      setExistingTags(tagCounts.slice(0, 12).map(tc => tc.tag));
+    }).catch(() => {});
+  }, []);
+
+  // Get current tags from input
+  const currentTags = tagsInput
+    .split(',')
+    .map(t => t.trim().toLowerCase())
+    .filter(Boolean);
+
+  // Filter suggestions: exclude already-entered tags
+  const suggestions = existingTags.filter(tag => !currentTags.includes(tag));
+
+  const addTag = (tag: string) => {
+    if (currentTags.includes(tag)) return;
+    const newTags = [...currentTags, tag];
+    setTagsInput(newTags.join(', '));
+  };
 
   const isEdit = Boolean(entryId);
   const canSave = category !== null && !saving;
@@ -53,18 +77,33 @@ export default function LogMomentScreen({ route, navigation }: any) {
   };
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={{ padding: theme.layout.screenPaddingX }}>
-      <View style={styles.content}>
-        <View style={styles.sectionTight}>
-          <Pressable onPress={() => navigation.goBack()} hitSlop={theme.hit.slop}>
-            <Text style={styles.link}>Back</Text>
-          </Pressable>
-        </View>
+    <SafeAreaView style={styles.screen} edges={['top']}>
+      <KeyboardAvoidingView 
+        style={{ flex: 1 }} 
+        behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+      >
+        <ScrollView 
+          style={{ flex: 1 }} 
+          contentContainerStyle={{ padding: theme.layout.screenPaddingX }}
+          keyboardShouldPersistTaps="handled"
+        >
+          <View style={styles.content}>
+            {/* Header with back and save buttons */}
+            <View style={[styles.sectionTight, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}>
+              <Pressable onPress={() => navigation.goBack()} hitSlop={theme.hit.slop}>
+                <Text style={styles.link}>Cancel</Text>
+              </Pressable>
+              <Pressable onPress={handleSave} disabled={!canSave} hitSlop={theme.hit.slop}>
+                <Text style={[styles.link, !canSave && { opacity: 0.4 }]}>
+                  {saving ? 'Saving...' : (isEdit ? 'Update' : 'Save')}
+                </Text>
+              </Pressable>
+            </View>
 
-        <View style={styles.section}>
-          <Text style={styles.h2}>{isEdit ? 'Edit entry' : 'Log a moment'}</Text>
-          <Text style={styles.body2}>What showed up today? Category required, everything else optional.</Text>
-        </View>
+            <View style={styles.section}>
+              <Text style={styles.h2}>{isEdit ? 'Edit entry' : 'Log a moment'}</Text>
+              <Text style={styles.body2}>What showed up today? Category required, everything else optional.</Text>
+            </View>
 
         <View style={styles.section}>
           <Card>
@@ -132,15 +171,28 @@ export default function LogMomentScreen({ route, navigation }: any) {
             />
             <Spacer size="s2" />
             <Text style={styles.hint}>Separate with commas</Text>
+            {suggestions.length > 0 && (
+              <>
+                <Spacer size="s3" />
+                <Text style={styles.hint}>Tap to add:</Text>
+                <Spacer size="s2" />
+                <View style={{ flexDirection: 'row', flexWrap: 'wrap', gap: theme.space.s2 }}>
+                  {suggestions.slice(0, 8).map(tag => (
+                    <Pressable key={tag} onPress={() => addTag(tag)}>
+                      <Pill label={`#${tag}`} />
+                    </Pressable>
+                  ))}
+                </View>
+              </>
+            )}
           </Card>
         </View>
 
-        <View style={styles.section}>
-          <Button label={saving ? 'Saving...' : (isEdit ? 'Update' : 'Save')} onPress={handleSave} disabled={!canSave} />
-          <Spacer size="s4" />
-          <Button label="Cancel" variant="text" onPress={() => navigation.goBack()} />
-        </View>
-      </View>
-    </ScrollView>
+            {/* Extra space for keyboard */}
+            <View style={{ height: theme.space.s8 }} />
+          </View>
+        </ScrollView>
+      </KeyboardAvoidingView>
+    </SafeAreaView>
   );
 }

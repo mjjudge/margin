@@ -4,6 +4,8 @@
 import { SyncResult } from './syncTypes';
 import { syncMeaningEntries } from './syncMeaningEntries';
 import { syncPracticeSessions } from './syncPracticeSessions';
+import { syncFragmentReveals } from './syncFragmentReveals';
+import { syncFragmentsCatalog } from './syncFragmentsCatalog';
 import { supabase } from '../../data/supabaseClient';
 
 export interface FullSyncResult {
@@ -67,6 +69,20 @@ export async function runFullSync(): Promise<FullSyncResult> {
   fullResult.totalConflicts += sessionsResult.conflictsResolved;
   fullResult.errors.push(...sessionsResult.errors);
 
+  // Sync fragments catalogue (read-only, pull from Supabase)
+  const catalogResult = await syncFragmentsCatalog();
+  fullResult.results.push(catalogResult);
+  fullResult.totalPulled += catalogResult.pulled;
+  fullResult.errors.push(...catalogResult.errors);
+
+  // Sync fragment reveals (bi-directional)
+  const revealsResult = await syncFragmentReveals();
+  fullResult.results.push(revealsResult);
+  fullResult.totalPulled += revealsResult.pulled;
+  fullResult.totalPushed += revealsResult.pushed;
+  fullResult.totalConflicts += revealsResult.conflictsResolved;
+  fullResult.errors.push(...revealsResult.errors);
+
   // Mark success if no fatal errors
   fullResult.success = fullResult.errors.length === 0;
 
@@ -85,4 +101,18 @@ export async function syncEntries(): Promise<SyncResult> {
  */
 export async function syncSessions(): Promise<SyncResult> {
   return syncPracticeSessions();
+}
+
+/**
+ * Sync only fragment reveals
+ */
+export async function syncReveals(): Promise<SyncResult> {
+  return syncFragmentReveals();
+}
+
+/**
+ * Sync only fragments catalogue
+ */
+export async function syncCatalog(): Promise<SyncResult> {
+  return syncFragmentsCatalog();
 }

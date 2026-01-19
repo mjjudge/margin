@@ -4,7 +4,8 @@ import { theme, Theme } from './theme';
 
 /**
  * Global layout primitives.
- * Goal: make “spacious by default” the path of least resistance.
+ * Goal: make "spacious by default" the path of least resistance,
+ * while adding just enough hierarchy + texture to feel intentional.
  */
 export function makeStyles(t: Theme = theme) {
   const hairline = StyleSheet.hairlineWidth;
@@ -23,11 +24,26 @@ export function makeStyles(t: Theme = theme) {
       paddingBottom: t.layout.screenPaddingY,
     },
 
+    // Optional subtle band to anchor a top section (use sparingly)
+    surfaceBand: {
+      backgroundColor: t.color.surface2,
+      borderRadius: t.radius.lg,
+      padding: t.space.s6,
+      borderWidth: hairline,
+      borderColor: t.color.border,
+    },
+
     // Keeps content readable on large screens/tablets
     content: {
       width: '100%',
       maxWidth: t.layout.maxContentWidth,
       alignSelf: 'center',
+    },
+
+    // ---- Screen header rhythm ----
+    // Use this to make the top of screens feel designed.
+    screenHeader: {
+      marginBottom: t.space.s8, // bigger-than-normal gap = intentional rhythm
     },
 
     // ---- Section rhythm ----
@@ -36,6 +52,20 @@ export function makeStyles(t: Theme = theme) {
     },
     sectionTight: {
       marginBottom: t.layout.blockGap,
+    },
+
+    // ---- Layout utilities ----
+    row: {
+      flexDirection: 'row',
+      alignItems: 'center',
+    },
+    rowBetween: {
+      flexDirection: 'row',
+      alignItems: 'center',
+      justifyContent: 'space-between',
+    },
+    stack: {
+      gap: t.layout.blockGap,
     },
 
     // ---- Cards ----
@@ -47,6 +77,27 @@ export function makeStyles(t: Theme = theme) {
       borderColor: t.color.border,
       ...t.shadow.soft,
     },
+
+    // A slightly more "present" card for the primary thing on a screen
+    // (e.g., Today's Practice). Use 1 per screen max.
+    cardHero: {
+      backgroundColor: t.color.surface,
+      borderRadius: t.radius.lg,
+      padding: t.layout.cardPadding,
+      borderWidth: hairline,
+      borderColor: t.color.border,
+      ...t.shadow.soft,
+    },
+
+    // Subtle inset area inside a card (for grouping)
+    cardInset: {
+      backgroundColor: t.color.surface2,
+      borderRadius: t.radius.md,
+      padding: t.space.s5,
+      borderWidth: hairline,
+      borderColor: t.color.border,
+    },
+
     cardFlat: {
       backgroundColor: t.color.surface,
       borderRadius: t.radius.md,
@@ -62,15 +113,27 @@ export function makeStyles(t: Theme = theme) {
     },
 
     // ---- Text ----
+    // Kicker: small all-caps-like feel without being shouty
+    kicker: {
+      color: t.color.text3,
+      fontSize: t.type.size.sm,
+      lineHeight: t.type.line.sm,
+      fontWeight: t.type.weight.medium,
+      fontFamily: t.type.family.medium,
+      letterSpacing: 0.6,
+      marginBottom: t.space.s2,
+      textTransform: 'uppercase',
+    },
+
     h1: {
       color: t.color.text,
       fontSize: t.type.size.xxl,
       lineHeight: t.type.line.xxl,
       fontWeight: t.type.weight.semibold,
-      // If you later bundle Inter/IBM Plex, update theme.type.family
       fontFamily: t.type.family.semibold,
       marginBottom: t.space.s2,
     },
+
     h2: {
       color: t.color.text,
       fontSize: t.type.size.xl,
@@ -79,6 +142,19 @@ export function makeStyles(t: Theme = theme) {
       fontFamily: t.type.family.semibold,
       marginBottom: t.space.s2,
     },
+
+    // A slightly quieter title style for subheadings ("Today's practice", "Next")
+    subtleTitle: {
+      color: t.color.text2,
+      fontSize: t.type.size.sm,
+      lineHeight: t.type.line.sm,
+      fontWeight: t.type.weight.medium,
+      fontFamily: t.type.family.medium,
+      letterSpacing: 0.2,
+      marginBottom: t.space.s2,
+      textTransform: 'uppercase',
+    },
+
     title: {
       color: t.color.text,
       fontSize: t.type.size.lg,
@@ -86,6 +162,7 @@ export function makeStyles(t: Theme = theme) {
       fontWeight: t.type.weight.semibold,
       fontFamily: t.type.family.semibold,
     },
+
     body: {
       color: t.color.text,
       fontSize: t.type.size.md,
@@ -93,6 +170,7 @@ export function makeStyles(t: Theme = theme) {
       fontWeight: t.type.weight.regular,
       fontFamily: t.type.family.regular,
     },
+
     body2: {
       color: t.color.text2,
       fontSize: t.type.size.md,
@@ -100,6 +178,7 @@ export function makeStyles(t: Theme = theme) {
       fontWeight: t.type.weight.regular,
       fontFamily: t.type.family.regular,
     },
+
     hint: {
       color: t.color.text3,
       fontSize: t.type.size.sm,
@@ -115,8 +194,16 @@ export function makeStyles(t: Theme = theme) {
       marginVertical: t.space.s4,
     },
 
+    // Even quieter divider (use inside cards)
+    dividerSoft: {
+      height: hairline,
+      backgroundColor: t.color.border,
+      opacity: 0.6,
+      marginVertical: t.space.s4,
+    },
+
     // ---- Buttons (quiet) ----
-    // Primary button is still restrained — use sparingly.
+    // Primary button: still restrained
     buttonPrimary: {
       minHeight: t.hit.minHeight,
       borderRadius: t.radius.md,
@@ -182,8 +269,8 @@ export function makeStyles(t: Theme = theme) {
     spacer6: { height: t.space.s6 },
     spacer7: { height: t.space.s7 },
     spacer8: { height: t.space.s8 },
+    spacer9: { height: t.space.s9 },
   });
 }
 
 export const styles = makeStyles();
-

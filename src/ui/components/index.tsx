@@ -6,3 +6,4 @@ export { Button } from './Button';
 export { Pill } from './Pill';
 export { Spacer } from './Spacer';
 export { ErrorBoundary } from './ErrorBoundary';
+export { FoundFragmentCard } from './FoundFragmentCard';

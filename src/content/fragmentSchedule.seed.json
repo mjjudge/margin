@@ -1,0 +1,68 @@
+{
+  "version": 1,
+  "rules": {
+    "min_practices_before_first_fragment": 3,
+    "cooldown_hours": 48,
+
+    "base_probability_per_eligible_open": 0.18,
+
+    "rolling_window_days": 7,
+    "max_fragments_per_rolling_window": 2,
+
+    "no_backfill": true,
+    "no_repeat": true
+  },
+
+  "age_buckets_days_since_first_practice": [
+    {
+      "min_days": 0,
+      "max_days": 30,
+      "voice_weights": {
+        "observer": 0.60,
+        "pattern_keeper": 0.30,
+        "naturalist": 0.10,
+        "witness": 0.0
+      }
+    },
+    {
+      "min_days": 31,
+      "max_days": 90,
+      "voice_weights": {
+        "observer": 0.40,
+        "pattern_keeper": 0.35,
+        "naturalist": 0.20,
+        "witness": 0.05
+      }
+    },
+    {
+      "min_days": 91,
+      "max_days": 180,
+      "voice_weights": {
+        "observer": 0.25,
+        "pattern_keeper": 0.30,
+        "naturalist": 0.25,
+        "witness": 0.20
+      }
+    },
+    {
+      "min_days": 181,
+      "max_days": 365,
+      "voice_weights": {
+        "observer": 0.15,
+        "pattern_keeper": 0.25,
+        "naturalist": 0.30,
+        "witness": 0.30
+      }
+    },
+    {
+      "min_days": 366,
+      "max_days": 99999,
+      "voice_weights": {
+        "observer": 0.10,
+        "pattern_keeper": 0.20,
+        "naturalist": 0.30,
+        "witness": 0.40
+      }
+    }
+  ]
+}

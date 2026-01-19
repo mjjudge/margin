@@ -1,11 +1,13 @@
 import { useState, useCallback } from 'react';
-import { View, Text, Pressable, ActivityIndicator, ScrollView } from 'react-native';
+import { View, Text, Pressable, ActivityIndicator, ScrollView, RefreshControl } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { useFocusEffect } from '@react-navigation/native';
 import { styles } from '../styles';
 import { theme } from '../theme';
 import { Card, Button, Pill, Spacer } from '../components';
 import { meaningRepo } from '../../data/repos/meaningRepo';
-import { computeMapStats, computeClusters, type MapStats, type Cluster } from '../../domain/map';
+import { computeMapStats, computeClusters, filterEntriesByTimeWindow, type MapStats, type Cluster, type TimeWindow } from '../../domain/map';
+import { runFullSync } from '../../domain/sync';
 
 const CATEGORY_LABELS: Record<string, string> = {
   meaningful: 'Meaningful',
@@ -14,16 +16,27 @@ const CATEGORY_LABELS: Record<string, string> = {
   empty_numb: 'Empty / numbed',
 };
 
+const TIME_WINDOWS: { key: TimeWindow; label: string }[] = [
+  { key: '7d', label: '7 days' },
+  { key: '30d', label: '30 days' },
+  { key: 'all', label: 'All time' },
+];
+
 export default function MapScreen({ navigation }: any) {
   const [stats, setStats] = useState<MapStats | null>(null);
   const [clusters, setClusters] = useState<Cluster[]>([]);
   const [loading, setLoading] = useState(true);
+  const [refreshing, setRefreshing] = useState(false);
+  const [timeWindow, setTimeWindow] = useState<TimeWindow>('30d');
+  const [allEntries, setAllEntries] = useState<any[]>([]);
 
   const loadData = useCallback(async () => {
     try {
       const entries = await meaningRepo.getAll();
-      const mapStats = computeMapStats(entries);
-      const tagClusters = computeClusters(entries);
+      setAllEntries(entries);
+      const filtered = filterEntriesByTimeWindow(entries, timeWindow);
+      const mapStats = computeMapStats(filtered);
+      const tagClusters = computeClusters(filtered);
       setStats(mapStats);
       setClusters(tagClusters);
     } catch (err) {
@@ -31,7 +44,29 @@ export default function MapScreen({ navigation }: any) {
     } finally {
       setLoading(false);
     }
-  }, []);
+  }, [timeWindow]);
+
+  // Recompute when time window changes
+  const handleTimeWindowChange = useCallback((window: TimeWindow) => {
+    setTimeWindow(window);
+    const filtered = filterEntriesByTimeWindow(allEntries, window);
+    const mapStats = computeMapStats(filtered);
+    const tagClusters = computeClusters(filtered);
+    setStats(mapStats);
+    setClusters(tagClusters);
+  }, [allEntries]);
+
+  const onRefresh = useCallback(async () => {
+    setRefreshing(true);
+    try {
+      await runFullSync();
+      await loadData();
+    } catch (err) {
+      console.error('[MapScreen] Refresh failed:', err);
+    } finally {
+      setRefreshing(false);
+    }
+  }, [loadData]);
 
   useFocusEffect(
     useCallback(() => {
@@ -56,17 +91,45 @@ export default function MapScreen({ navigation }: any) {
   const totalEntries = stats?.totalEntries ?? 0;
 
   return (
-    <ScrollView style={styles.screen} contentContainerStyle={{ padding: theme.layout.screenPaddingX }}>
-      <View style={styles.content}>
-        <View style={styles.sectionTight}>
-          <Pressable onPress={() => navigation.goBack()} hitSlop={theme.hit.slop}>
-            <Text style={styles.link}>Back</Text>
-          </Pressable>
-        </View>
+    <SafeAreaView style={styles.screen} edges={['top']}>
+      <ScrollView 
+        style={{ flex: 1 }} 
+        contentContainerStyle={{ padding: theme.layout.screenPaddingX }}
+        refreshControl={
+          <RefreshControl
+            refreshing={refreshing}
+            onRefresh={onRefresh}
+            tintColor={theme.color.text3}
+          />
+        }
+      >
+        <View style={styles.content}>
+          <View style={styles.sectionTight}>
+            <Pressable onPress={() => navigation.goBack()} hitSlop={theme.hit.slop}>
+              <Text style={styles.link}>Back</Text>
+            </Pressable>
+          </View>
 
         <View style={styles.section}>
           <Text style={styles.h2}>Meaning Map</Text>
           <Text style={styles.body2}>Patterns from what you've logged. Descriptive, not prescriptive.</Text>
+          <Spacer size="s4" />
+          <View style={{ flexDirection: 'row', gap: theme.space.s2 }}>
+            {TIME_WINDOWS.map(tw => (
+              <Pressable
+                key={tw.key}
+                onPress={() => handleTimeWindowChange(tw.key)}
+                style={[
+                  styles.pill,
+                  timeWindow === tw.key && { backgroundColor: theme.color.accent, borderColor: theme.color.accent },
+                ]}
+              >
+                <Text style={[styles.pillText, timeWindow === tw.key && { color: theme.color.surface }]}>
+                  {tw.label}
+                </Text>
+              </Pressable>
+            ))}
+          </View>
         </View>
 
         <View style={styles.section}>
@@ -164,10 +227,11 @@ export default function MapScreen({ navigation }: any) {
           <Button label="Log a moment" variant="text" onPress={() => navigation.navigate('LogMoment')} />
         </View>
 
-        <View style={styles.sectionTight}>
-          <Text style={styles.hint}>The map shows what tends to appear. It doesn't suggest what should.</Text>
+          <View style={styles.sectionTight}>
+            <Text style={styles.hint}>The map shows what tends to appear. It doesn't suggest what should.</Text>
+          </View>
         </View>
-      </View>
-    </ScrollView>
+      </ScrollView>
+    </SafeAreaView>
   );
 }

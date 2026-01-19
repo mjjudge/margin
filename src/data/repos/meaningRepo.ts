@@ -185,6 +185,18 @@ export const meaningRepo = {
   },
 
   /**
+   * Restore a soft-deleted entry (undo delete)
+   */
+  async restore(id: string): Promise<void> {
+    const db = await getDb();
+    const now = nowISO();
+    await db.runAsync(
+      'UPDATE meaning_entries SET deleted_at = NULL, updated_at = ? WHERE id = ?',
+      [now, id]
+    );
+  },
+
+  /**
    * Count entries by category
    */
   async countByCategory(): Promise<Record<MeaningCategory, number>> {

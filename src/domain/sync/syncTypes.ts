@@ -1,4 +1,4 @@
-export type SyncTable = 'meaning_entries' | 'practice_sessions';
+export type SyncTable = 'meaning_entries' | 'practice_sessions' | 'fragment_reveals' | 'fragments_catalog';
 
 export interface SyncState {
   table: SyncTable;

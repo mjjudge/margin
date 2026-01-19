@@ -14,6 +14,8 @@ import MapScreen from '../screens/MapScreen';
 import EntriesScreen from '../screens/EntriesScreen';
 import SettingsScreen from '../screens/SettingsScreen';
 import AuthScreen from '../screens/AuthScreen';
+import PhilosophyScreen from '../screens/PhilosophyScreen';
+import SyncStatusScreen from '../screens/SyncStatusScreen';
 
 const Stack = createNativeStackNavigator();
 
@@ -39,6 +41,8 @@ const SafeMapScreen = withErrorBoundary(MapScreen, 'Map');
 const SafeEntriesScreen = withErrorBoundary(EntriesScreen, 'Entries');
 const SafeSettingsScreen = withErrorBoundary(SettingsScreen, 'Settings');
 const SafeAuthScreen = withErrorBoundary(AuthScreen, 'Auth');
+const SafePhilosophyScreen = withErrorBoundary(PhilosophyScreen, 'Philosophy');
+const SafeSyncStatusScreen = withErrorBoundary(SyncStatusScreen, 'SyncStatus');
 
 function LoadingScreen() {
   return (
@@ -72,6 +76,8 @@ export default function AppNavigator() {
             <Stack.Screen name="Map" component={SafeMapScreen} />
             <Stack.Screen name="Entries" component={SafeEntriesScreen} />
             <Stack.Screen name="Settings" component={SafeSettingsScreen} />
+            <Stack.Screen name="Philosophy" component={SafePhilosophyScreen} />
+            <Stack.Screen name="SyncStatus" component={SafeSyncStatusScreen} />
           </>
         ) : (
           // Unauthenticated routes

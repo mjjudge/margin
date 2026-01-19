@@ -230,3 +230,65 @@ A feature is done when:
 - Changes are committed and pushed
 
 ---
+
+## 13) Found Fragments guardrails
+
+Found Fragments have additional constraints beyond the general rules.
+
+### 13.1 Content rules (fragment text)
+
+**Never allowed:**
+- "You should" / "Try to" / "Remember to"
+- "This will help" / "This is good for you"
+- "Improve" / "Fix" / "Heal" / "Better"
+- Any imperative mood directed at the user
+- Any promise of outcome or benefit
+
+**Always allowed:**
+- Observations without action implication
+- Descriptions of what is, not what should be
+- Acknowledgment of presence, noticing, patterns
+
+### 13.2 Implementation rules
+
+1. **No coupling to user data.**
+   - Fragments must not reference practices completed, entries logged, tags used, or time spent.
+   - Fragment selection is based on eligibility gates, not personalisation.
+
+2. **No journey/progress UI.**
+   - No "X of 100 fragments seen"
+   - No progress bar
+   - No collection view
+   - No "you've unlocked a new voice"
+
+3. **No archive or history.**
+   - Once dismissed, a fragment is gone.
+   - Users cannot browse or search past fragments.
+
+4. **No backfill.**
+   - If a user turns off fragments, then back on, they do not receive "missed" fragments.
+   - The drip continues from where they are, not where they "should" be.
+
+5. **No completion state.**
+   - When fragments are exhausted, silence returns without announcement.
+   - No "congratulations" or "you've seen them all".
+
+### 13.3 Voice attribution
+
+- Fragments have a `voice` field in the data model (observer, pattern_keeper, naturalist, witness).
+- **Voice is never shown to the user.** It exists only for authoring and engine weighting.
+- The user experiences fragments as undifferentiated "found notes".
+
+### 13.4 Drift risks specific to fragments
+
+Agents must not:
+- Turn fragments into a coaching curriculum
+- Add "themed weeks" or "voice journeys"
+- Link fragment content to user behaviour
+- Add sharing, saving, or favouriting
+- Add notifications about fragments
+- Make fragments feel like rewards
+
+If a fragment implementation makes the app feel more like Headspace, Calm, or a quote-of-the-day widget, it is wrong.
+
+---

@@ -6,9 +6,11 @@ export {
   countByCategory, 
   countTags, 
   computeNetMeaning,
+  filterEntriesByTimeWindow,
   type MapStats,
   type TagCount,
   type TagNetMeaning,
+  type TimeWindow,
 } from './mapStats';
 
 export { 

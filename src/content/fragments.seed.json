@@ -1,0 +1,605 @@
+{
+  "version": 1,
+  "fragments": [
+    {
+      "id": "frag_0001",
+      "voice": "observer",
+      "enabled": true,
+      "text": "This happened.\nYou noticed it.\nThat is enough."
+    },
+    {
+      "id": "frag_0002",
+      "voice": "observer",
+      "enabled": true,
+      "text": "Attention does not change things.\nIt changes what is visible."
+    },
+    {
+      "id": "frag_0003",
+      "voice": "observer",
+      "enabled": true,
+      "text": "Nothing is required of this moment\nfor it to exist fully."
+    },
+    {
+      "id": "frag_0004",
+      "voice": "observer",
+      "enabled": true,
+      "text": "You can notice something\nwithout keeping it."
+    },
+    {
+      "id": "frag_0005",
+      "voice": "observer",
+      "enabled": true,
+      "text": "This is not an exercise.\nIt is an encounter."
+    },
+    {
+      "id": "frag_0006",
+      "voice": "observer",
+      "enabled": true,
+      "text": "Experience does not wait\nto be understood."
+    },
+    {
+      "id": "frag_0007",
+      "voice": "observer",
+      "enabled": true,
+      "text": "What you noticed did not ask\nto be noticed."
+    },
+    {
+      "id": "frag_0008",
+      "voice": "observer",
+      "enabled": true,
+      "text": "There is no correct distance\nfrom what is happening."
+    },
+    {
+      "id": "frag_0009",
+      "voice": "observer",
+      "enabled": true,
+      "text": "This moment is not improved\nby commentary."
+    },
+    {
+      "id": "frag_0010",
+      "voice": "observer",
+      "enabled": true,
+      "text": "Seeing something clearly\ndoes not obligate response."
+    },
+    {
+      "id": "frag_0011",
+      "voice": "observer",
+      "enabled": true,
+      "text": "Awareness is not effort.\nIt is availability."
+    },
+    {
+      "id": "frag_0012",
+      "voice": "observer",
+      "enabled": true,
+      "text": "Nothing here needs to resolve."
+    },
+    {
+      "id": "frag_0013",
+      "voice": "observer",
+      "enabled": true,
+      "text": "Noticing is already participation."
+    },
+    {
+      "id": "frag_0014",
+      "voice": "observer",
+      "enabled": true,
+      "text": "This was real\neven if you say nothing about it."
+    },
+    {
+      "id": "frag_0015",
+      "voice": "observer",
+      "enabled": true,
+      "text": "You were present.\nThat is the whole account."
+    },
+    {
+      "id": "frag_0016",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Some things arrive once.\nOthers return quietly."
+    },
+    {
+      "id": "frag_0017",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Repetition does not insist.\nIt simply reappears."
+    },
+    {
+      "id": "frag_0018",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Patterns form\nwithout asking permission."
+    },
+    {
+      "id": "frag_0019",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "What repeats is not always important.\nBut it is rarely accidental."
+    },
+    {
+      "id": "frag_0020",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "A pattern is just a shape\nseen over time."
+    },
+    {
+      "id": "frag_0021",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Noticing recurrence\ndoes not require explanation."
+    },
+    {
+      "id": "frag_0022",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Some things cluster\nwithout belonging together."
+    },
+    {
+      "id": "frag_0023",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Rhythm is not intention.\nIt is timing."
+    },
+    {
+      "id": "frag_0024",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Patterns do not predict.\nThey reveal."
+    },
+    {
+      "id": "frag_0025",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "What returns\noften does so unchanged."
+    },
+    {
+      "id": "frag_0026",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "You are not required\nto respond to recurrence."
+    },
+    {
+      "id": "frag_0027",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Seeing a pattern\nis not the same as following it."
+    },
+    {
+      "id": "frag_0028",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Some things repeat\nuntil they are noticed."
+    },
+    {
+      "id": "frag_0029",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Frequency is a form of information."
+    },
+    {
+      "id": "frag_0030",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Patterns remain\nwhether or not they are named."
+    },
+    {
+      "id": "frag_0031",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "Long before language,\nthere was experience."
+    },
+    {
+      "id": "frag_0032",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "Nothing you notice here\nbegan with you."
+    },
+    {
+      "id": "frag_0033",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "Awareness did not start\nas a personal trait."
+    },
+    {
+      "id": "frag_0034",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "Life has always been\nattentive to itself."
+    },
+    {
+      "id": "frag_0035",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "What feels immediate\noften has deep roots."
+    },
+    {
+      "id": "frag_0036",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "This way of noticing\nis older than memory."
+    },
+    {
+      "id": "frag_0037",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "Experience preceded explanation\nby a long time."
+    },
+    {
+      "id": "frag_0038",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "The world did not wait\nfor interpretation to begin."
+    },
+    {
+      "id": "frag_0039",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "Attention is not an invention.\nIt is an inheritance."
+    },
+    {
+      "id": "frag_0040",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "You are participating\nin something very old."
+    },
+    {
+      "id": "frag_0041",
+      "voice": "witness",
+      "enabled": true,
+      "text": "Very little is meaningful\non its own."
+    },
+    {
+      "id": "frag_0042",
+      "voice": "witness",
+      "enabled": true,
+      "text": "What touches you\nis rarely isolated."
+    },
+    {
+      "id": "frag_0043",
+      "voice": "witness",
+      "enabled": true,
+      "text": "Some moments lean\ntoward others."
+    },
+    {
+      "id": "frag_0044",
+      "voice": "witness",
+      "enabled": true,
+      "text": "Connection is often felt\nbefore it is recognised."
+    },
+    {
+      "id": "frag_0045",
+      "voice": "witness",
+      "enabled": true,
+      "text": "Separation is a useful idea.\nNot always a true one."
+    },
+    {
+      "id": "frag_0046",
+      "voice": "witness",
+      "enabled": true,
+      "text": "What appears distinct\nmay still belong."
+    },
+    {
+      "id": "frag_0047",
+      "voice": "witness",
+      "enabled": true,
+      "text": "Meaning often arises\nbetween things."
+    },
+    {
+      "id": "frag_0048",
+      "voice": "witness",
+      "enabled": true,
+      "text": "No moment stands entirely alone."
+    },
+    {
+      "id": "frag_0049",
+      "voice": "witness",
+      "enabled": true,
+      "text": "What you notice\nalso notices."
+    },
+    {
+      "id": "frag_0050",
+      "voice": "witness",
+      "enabled": true,
+      "text": "Some recognitions\ndo not need names."
+    },
+    {
+      "id": "frag_0051",
+      "voice": "observer",
+      "enabled": true,
+      "text": "Nothing needs to be extracted\nfrom this moment."
+    },
+    {
+      "id": "frag_0052",
+      "voice": "observer",
+      "enabled": true,
+      "text": "You are allowed\nto let this pass unchanged."
+    },
+    {
+      "id": "frag_0053",
+      "voice": "observer",
+      "enabled": true,
+      "text": "Attention does not demand\nthat something be useful."
+    },
+    {
+      "id": "frag_0054",
+      "voice": "observer",
+      "enabled": true,
+      "text": "This was complete\nbefore you noticed it."
+    },
+    {
+      "id": "frag_0055",
+      "voice": "observer",
+      "enabled": true,
+      "text": "Not everything observed\nbecomes part of a story."
+    },
+    {
+      "id": "frag_0056",
+      "voice": "observer",
+      "enabled": true,
+      "text": "Presence does not accumulate."
+    },
+    {
+      "id": "frag_0057",
+      "voice": "observer",
+      "enabled": true,
+      "text": "You can notice\nwithout remembering."
+    },
+    {
+      "id": "frag_0058",
+      "voice": "observer",
+      "enabled": true,
+      "text": "This moment does not ask\nto be carried forward."
+    },
+    {
+      "id": "frag_0059",
+      "voice": "observer",
+      "enabled": true,
+      "text": "Awareness leaves\nno residue of obligation."
+    },
+    {
+      "id": "frag_0060",
+      "voice": "observer",
+      "enabled": true,
+      "text": "What is seen clearly\ndoes not require retention."
+    },
+    {
+      "id": "frag_0061",
+      "voice": "observer",
+      "enabled": true,
+      "text": "This was enough\nwhile it was here."
+    },
+    {
+      "id": "frag_0062",
+      "voice": "observer",
+      "enabled": true,
+      "text": "You do not need\nto hold this."
+    },
+    {
+      "id": "frag_0063",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Some patterns dissolve\nonce they are recognised."
+    },
+    {
+      "id": "frag_0064",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Not all repetition\nasks for response."
+    },
+    {
+      "id": "frag_0065",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "A rhythm can exist\nwithout meaning anything."
+    },
+    {
+      "id": "frag_0066",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "What fades\nmay still have mattered."
+    },
+    {
+      "id": "frag_0067",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Patterns change\nwithout announcing it."
+    },
+    {
+      "id": "frag_0068",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Noticing is not control."
+    },
+    {
+      "id": "frag_0069",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Some sequences end\nwithout conclusion."
+    },
+    {
+      "id": "frag_0070",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Absence can also repeat."
+    },
+    {
+      "id": "frag_0071",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "What once returned\nmay quietly stop."
+    },
+    {
+      "id": "frag_0072",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Patterns do not require loyalty."
+    },
+    {
+      "id": "frag_0073",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "Change often enters\nbetween repetitions."
+    },
+    {
+      "id": "frag_0074",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "There is no obligation\nto preserve a pattern."
+    },
+    {
+      "id": "frag_0075",
+      "voice": "pattern_keeper",
+      "enabled": true,
+      "text": "What no longer appears\nis also information."
+    },
+    {
+      "id": "frag_0076",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "You are not late\nto this way of noticing."
+    },
+    {
+      "id": "frag_0077",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "This has been happening\nin many forms."
+    },
+    {
+      "id": "frag_0078",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "Nothing about this\nis exclusive to you."
+    },
+    {
+      "id": "frag_0079",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "Attention has survived\nmany names."
+    },
+    {
+      "id": "frag_0080",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "What you experience\nhas many ancestors."
+    },
+    {
+      "id": "frag_0081",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "Life learned to notice\nlong before it learned to speak."
+    },
+    {
+      "id": "frag_0082",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "You are inside a continuity,\nnot at its centre."
+    },
+    {
+      "id": "frag_0083",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "This did not begin\nwith intention."
+    },
+    {
+      "id": "frag_0084",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "Awareness persists\nwithout needing to be remembered."
+    },
+    {
+      "id": "frag_0085",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "You are a moment\nin a long attentiveness."
+    },
+    {
+      "id": "frag_0086",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "This way of being present\nhas outlived many explanations."
+    },
+    {
+      "id": "frag_0087",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "You are not separate\nfrom what notices."
+    },
+    {
+      "id": "frag_0088",
+      "voice": "naturalist",
+      "enabled": true,
+      "text": "Nothing about this\nneeds defending."
+    },
+    {
+      "id": "frag_0089",
+      "voice": "witness",
+      "enabled": true,
+      "text": "Meaning often arrives\nafter the moment has passed."
+    },
+    {
+      "id": "frag_0090",
+      "voice": "witness",
+      "enabled": true,
+      "text": "What mattered\nwas never fully contained."
+    },
+    {
+      "id": "frag_0091",
+      "voice": "witness",
+      "enabled": true,
+      "text": "Some connections\nare felt more than seen."
+    },
+    {
+      "id": "frag_0092",
+      "voice": "witness",
+      "enabled": true,
+      "text": "You belong\nwithout needing to be included."
+    },
+    {
+      "id": "frag_0093",
+      "voice": "witness",
+      "enabled": true,
+      "text": "What touches you\nis already in relation."
+    },
+    {
+      "id": "frag_0094",
+      "voice": "witness",
+      "enabled": true,
+      "text": "No experience is entirely private."
+    },
+    {
+      "id": "frag_0095",
+      "voice": "witness",
+      "enabled": true,
+      "text": "What moves through you\ndoes not stop there."
+    },
+    {
+      "id": "frag_0096",
+      "voice": "witness",
+      "enabled": true,
+      "text": "You are part of\nwhat you notice."
+    },
+    {
+      "id": "frag_0097",
+      "voice": "witness",
+      "enabled": true,
+      "text": "Nothing meaningful\nstands alone for long."
+    },
+    {
+      "id": "frag_0098",
+      "voice": "witness",
+      "enabled": true,
+      "text": "This moment is held\nby more than you."
+    },
+    {
+      "id": "frag_0099",
+      "voice": "witness",
+      "enabled": true,
+      "text": "Some forms of knowing\ndo not separate subject and object."
+    },
+    {
+      "id": "frag_0100",
+      "voice": "witness",
+      "enabled": true,
+      "text": "You are not outside\nof what is happening."
+    }
+  ]
+}

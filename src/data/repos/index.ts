@@ -4,3 +4,4 @@
 export { practicesRepo } from './practicesRepo';
 export { sessionsRepo } from './sessionsRepo';
 export { meaningRepo } from './meaningRepo';
+export { fragmentsRepo } from './fragmentsRepo';

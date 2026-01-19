@@ -1,5 +1,7 @@
-import { useEffect, useState, useCallback } from 'react';
+import { useEffect, useState, useCallback, useRef } from 'react';
 import { View, Text, ActivityIndicator } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
+import * as Haptics from 'expo-haptics';
 import { styles } from '../styles';
 import { theme } from '../theme';
 import { Button, Pill, Spacer } from '../components';
@@ -54,12 +56,25 @@ export default function PracticeScreen({ route, navigation }: any) {
     initSession();
   }, [initSession]);
 
+  // Track if timer has completed to trigger haptic only once
+  const hasTriggeredHaptic = useRef(false);
+
   // Timer effect
   useEffect(() => {
     if (!isRunning || secondsLeft <= 0) return;
     const id = setInterval(() => setSecondsLeft(p => (p > 0 ? p - 1 : 0)), 1000);
     return () => clearInterval(id);
   }, [isRunning, secondsLeft]);
+
+  // Haptic feedback when timer completes
+  useEffect(() => {
+    if (secondsLeft === 0 && !hasTriggeredHaptic.current) {
+      hasTriggeredHaptic.current = true;
+      // Noticeable double tap
+      Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium);
+      setTimeout(() => Haptics.impactAsync(Haptics.ImpactFeedbackStyle.Medium), 200);
+    }
+  }, [secondsLeft]);
 
   const handleFinish = async () => {
     if (session) {
@@ -103,8 +118,9 @@ export default function PracticeScreen({ route, navigation }: any) {
   const total = practice.duration_seconds ?? 180;
 
   return (
-    <View style={styles.screenPadded}>
-      <View style={styles.content}>
+    <SafeAreaView style={styles.screen} edges={['top']}>
+      <View style={[styles.screenPadded, { paddingTop: 0 }]}>
+        <View style={styles.content}>
         <View style={[styles.sectionTight, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}>
           <Button label="Exit" variant="text" onPress={handleExit} />
           <Pill label={practice.mode} />
@@ -112,17 +128,19 @@ export default function PracticeScreen({ route, navigation }: any) {
 
         <View style={styles.section}>
           <View style={styles.card}>
-            <Text style={styles.title}>Practice</Text>
+            <Text style={styles.subtleTitle}>Practice</Text>
             <Spacer size="s4" />
             <Text style={styles.h2}>{practice.title}</Text>
             <Spacer size="s4" />
             <Text style={styles.body}>{practice.instruction}</Text>
             <Spacer size="s7" />
 
-            <View style={{ alignItems: 'center' }}>
-              <Text style={styles.h2}>{formatMMSS(secondsLeft)}</Text>
-              <Spacer size="s4" />
-              <Text style={styles.hint}>The timer is optional. You can finish whenever you want.</Text>
+            <View style={styles.cardInset}>
+              <View style={{ alignItems: 'center' }}>
+                <Text style={styles.h2}>{formatMMSS(secondsLeft)}</Text>
+                <Spacer size="s4" />
+                <Text style={styles.hint}>The timer is optional. You can finish whenever you want.</Text>
+              </View>
             </View>
 
             <Spacer size="s6" />
@@ -146,10 +164,11 @@ export default function PracticeScreen({ route, navigation }: any) {
           </View>
         </View>
 
-        <View style={styles.sectionTight}>
-          <Text style={styles.hint}>If attention drifts, return gently. Nothing to achieve.</Text>
+          <View style={styles.sectionTight}>
+            <Text style={styles.hint}>If attention drifts, return gently. Nothing to achieve.</Text>
+          </View>
         </View>
       </View>
-    </View>
+    </SafeAreaView>
   );
 }

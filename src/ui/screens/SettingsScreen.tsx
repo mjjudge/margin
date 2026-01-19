@@ -1,17 +1,29 @@
-import { useState } from 'react';
-import { View, Text, Pressable, Alert } from 'react-native';
+import { useState, useEffect } from 'react';
+import { View, Text, Pressable, Alert, ScrollView, Switch } from 'react-native';
+import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '../styles';
 import { theme } from '../theme';
 import { Card, Button, Spacer } from '../components';
 import { useAuth } from '../../data/auth';
-import { runFullSync } from '../../domain/sync';
 import { exportDataToJSON } from '../../domain/export';
+import { deleteAccountData } from '../../domain/account';
+import { getFragmentsEnabled, setFragmentsEnabled } from '../hooks';
 
 export default function SettingsScreen({ navigation }: any) {
   const { session, signOut, loading } = useAuth();
-  const [syncing, setSyncing] = useState(false);
   const [exporting, setExporting] = useState(false);
-  const [lastSyncResult, setLastSyncResult] = useState<string | null>(null);
+  const [deleting, setDeleting] = useState(false);
+  const [fragmentsEnabled, setFragmentsEnabledState] = useState(true);
+
+  // Load fragments setting on mount
+  useEffect(() => {
+    getFragmentsEnabled().then(setFragmentsEnabledState);
+  }, []);
+
+  const handleToggleFragments = async (value: boolean) => {
+    setFragmentsEnabledState(value);
+    await setFragmentsEnabled(value);
+  };
 
   const handleExport = async () => {
     setExporting(true);
@@ -24,40 +36,6 @@ export default function SettingsScreen({ navigation }: any) {
       Alert.alert('Export failed', String(err));
     } finally {
       setExporting(false);
-    }
-  };
-
-  const handleSync = async () => {
-    if (!session) {
-      Alert.alert('Not signed in', 'Sign in to sync your data.');
-      return;
-    }
-
-    setSyncing(true);
-    setLastSyncResult(null);
-
-    try {
-      const result = await runFullSync();
-      
-      if (result.success) {
-        const summary = `Pulled: ${result.totalPulled}, Pushed: ${result.totalPushed}`;
-        setLastSyncResult(summary);
-        if (result.totalPulled > 0 || result.totalPushed > 0) {
-          Alert.alert('Sync complete', summary);
-        } else {
-          Alert.alert('Sync complete', 'Already up to date.');
-        }
-      } else {
-        const errorMsg = result.errors.join(', ') || 'Unknown error';
-        setLastSyncResult(`Error: ${errorMsg}`);
-        Alert.alert('Sync failed', errorMsg);
-      }
-    } catch (err) {
-      const errorMsg = String(err);
-      setLastSyncResult(`Error: ${errorMsg}`);
-      Alert.alert('Sync error', errorMsg);
-    } finally {
-      setSyncing(false);
     }
   };
 
@@ -81,14 +59,55 @@ export default function SettingsScreen({ navigation }: any) {
     );
   };
 
+  const handleDeleteAccount = () => {
+    Alert.alert(
+      'Delete all data?',
+      'This will permanently remove all your entries, sessions, and local data. This cannot be undone.\n\nYour account will remain but all data will be gone.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Delete all data',
+          style: 'destructive',
+          onPress: () => confirmDeleteAccount(),
+        },
+      ]
+    );
+  };
+
+  const confirmDeleteAccount = () => {
+    // Second confirmation for safety
+    Alert.alert(
+      'Are you sure?',
+      'All your data will be permanently deleted.',
+      [
+        { text: 'Cancel', style: 'cancel' },
+        {
+          text: 'Yes, delete everything',
+          style: 'destructive',
+          onPress: async () => {
+            setDeleting(true);
+            const result = await deleteAccountData();
+            setDeleting(false);
+            
+            if (!result.success) {
+              Alert.alert('Error', result.error || 'Failed to delete data');
+            }
+            // If successful, user will be signed out and redirected automatically
+          },
+        },
+      ]
+    );
+  };
+
   return (
-    <View style={styles.screenPadded}>
-      <View style={styles.content}>
-        <View style={styles.sectionTight}>
-          <Pressable onPress={() => navigation.goBack()} hitSlop={theme.hit.slop}>
-            <Text style={styles.link}>Back</Text>
-          </Pressable>
-        </View>
+    <SafeAreaView style={styles.screen} edges={['top']}>
+      <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: theme.layout.screenPaddingX }}>
+        <View style={styles.content}>
+          <View style={styles.sectionTight}>
+            <Pressable onPress={() => navigation.goBack()} hitSlop={theme.hit.slop}>
+              <Text style={styles.link}>Back</Text>
+            </Pressable>
+          </View>
 
         <View style={styles.section}>
           <Text style={styles.h2}>Settings</Text>
@@ -103,25 +122,33 @@ export default function SettingsScreen({ navigation }: any) {
               onPress={handleExport}
               disabled={exporting}
             />
-            <Spacer size="s4" />
-            <Button 
-              label={syncing ? 'Syncing...' : 'Sync now'} 
-              variant="text" 
-              onPress={handleSync}
-              disabled={syncing || !session}
-            />
-            {lastSyncResult && (
-              <>
+            <Spacer size="s3" />
+            <Pressable onPress={() => navigation.navigate('SyncStatus')} hitSlop={theme.hit.slop}>
+              <Text style={styles.link}>Sync status</Text>
+            </Pressable>
+          </Card>
+        </View>
+
+        <View style={styles.section}>
+          <Card>
+            <View style={styles.rowBetween}>
+              <View style={{ flex: 1 }}>
+                <Text style={styles.title}>Found notes</Text>
                 <Spacer size="s2" />
-                <Text style={styles.hint}>{lastSyncResult}</Text>
-              </>
-            )}
-            {!session && (
-              <>
-                <Spacer size="s2" />
-                <Text style={styles.hint}>Sign in to enable sync</Text>
-              </>
-            )}
+                <Text style={styles.hint}>
+                  Occasionally surfaces short reflections after practice.
+                </Text>
+              </View>
+              <Switch
+                value={fragmentsEnabled}
+                onValueChange={handleToggleFragments}
+                trackColor={{ 
+                  false: theme.color.border, 
+                  true: theme.color.accent 
+                }}
+                thumbColor={theme.color.surface}
+              />
+            </View>
           </Card>
         </View>
 
@@ -139,6 +166,12 @@ export default function SettingsScreen({ navigation }: any) {
                   onPress={handleSignOut}
                   disabled={loading}
                 />
+                <Spacer size="s3" />
+                <Pressable onPress={handleDeleteAccount} disabled={deleting} hitSlop={theme.hit.slop}>
+                  <Text style={[styles.link, { color: theme.color.warn }]}>
+                    {deleting ? 'Deleting...' : 'Delete all data'}
+                  </Text>
+                </Pressable>
               </>
             ) : (
               <Text style={styles.body2}>Not signed in</Text>
@@ -155,9 +188,14 @@ export default function SettingsScreen({ navigation }: any) {
             <Text style={styles.hint}>
               A tool for noticing attention and observing meaning patterns.
             </Text>
+            <Spacer size="s4" />
+            <Pressable onPress={() => navigation.navigate('Philosophy')} hitSlop={theme.hit.slop}>
+              <Text style={styles.link}>Philosophy</Text>
+            </Pressable>
           </Card>
         </View>
       </View>
-    </View>
+    </ScrollView>
+  </SafeAreaView>
   );
 }

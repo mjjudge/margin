@@ -257,4 +257,69 @@ Not “improved”.
 Just clearer.
 
 That is enough.
+---
 
+## 13. Found Fragments: Rationale & Aesthetic
+
+### Why "found notes"?
+
+The core Margin concept — that attention reveals meaning, that completion is enough, that patterns exist without requiring action — often lands only after repeated, gentle exposure.
+
+But repeated exposure through instruction would feel like coaching.
+And coaching would violate the app's core posture.
+
+Found Fragments solve this by being:
+- **discovered, not delivered** — they feel like scraps left behind, not messages sent
+- **occasional, not systematic** — rare enough to feel like accidents
+- **non-instructional** — observations, not guidance
+
+The aesthetic is: *you found a note tucked inside a book you borrowed*.
+
+### Why "two-year drip"?
+
+100 fragments, revealed at roughly 2 per week, takes about a year to exhaust.
+But the release engine is probabilistic, not scheduled, so some users will take longer.
+
+This pacing exists because:
+- **Meaning accumulates slowly.** Rushing the fragments would flatten them.
+- **Rarity creates presence.** A fragment that appears every day becomes wallpaper.
+- **The app should feel unhurried.** Two years is a gesture of patience.
+
+### Why "no repeats"?
+
+Each fragment is shown at most once per user, ever.
+
+This is not a content-delivery system.
+A fragment that repeats becomes a feature.
+A fragment that appears once, then is gone, remains an encounter.
+
+### Why "no endpoint"?
+
+There is no "you've seen them all" message.
+No completion badge.
+No unlockable final fragment.
+
+When the fragments run out, silence returns.
+That silence is not a bug — it is the natural state.
+
+The app does not reward exhaustive engagement.
+It simply stops speaking when there is nothing left to say.
+
+### Visual aesthetic
+
+Fragments should feel like:
+- **parchment or scrap paper** — warm, slightly textured
+- **found in a margin** — inset, not centred
+- **quiet** — no labels, no voice attribution visible to user
+
+They should not feel like:
+- notifications
+- achievements
+- quotes of the day
+- loading screen tips
+
+The fragment appears.
+The user reads it (or doesn't).
+It disappears.
+
+That is all.

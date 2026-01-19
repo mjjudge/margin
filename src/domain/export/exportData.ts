@@ -36,6 +36,10 @@ interface ExportedPracticeSession {
 interface ExportData {
   exportedAt: string;
   version: '1.0';
+  appName: 'Margin';
+  description: string;
+  whatIsIncluded: string[];
+  whatIsNotIncluded: string[];
   meaningEntries: ExportedMeaningEntry[];
   practiceSessions: ExportedPracticeSession[];
   summary: {
@@ -123,6 +127,19 @@ async function gatherExportData(): Promise<ExportData> {
   return {
     exportedAt: new Date().toISOString(),
     version: '1.0',
+    appName: 'Margin',
+    description: 'Your personal Margin data export. This file contains your logged moments and practice sessions.',
+    whatIsIncluded: [
+      'All your meaning entries (text, categories, tags, timestamps)',
+      'All your practice sessions (dates, completion status, notes)',
+      'Summary statistics',
+    ],
+    whatIsNotIncluded: [
+      'Your account email or user ID',
+      'Authentication tokens',
+      'Practice definitions (these are system data)',
+      'Internal sync state',
+    ],
     meaningEntries,
     practiceSessions,
     summary: {

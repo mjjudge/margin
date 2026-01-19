@@ -1,267 +1,324 @@
-Below is a **fresh, agent-sized backlog** aligned to the **latest docs + decisions** (Supabase, multi-device sync, secure-by-design, Expo/RN, local SQLite as cache). It’s designed so agents can: **read docs → install deps → wire skeleton → ship working vertical slices**.
-
-You can copy/paste these into GitHub Issues. Titles are intentionally “commit-sized”.
-
----
-
-# Backlog v2 (Supabase + Auth + Sync + UI Theme)
-
-## ~~EPIC 0 — Agent onboarding and repo health~~ ✅ COMPLETE
-
-### ~~0.1 `chore: verify required docs present and linked`~~ ✅
-
-### ~~0.2 `chore: install dependencies and lock toolchain`~~ ✅
-
-### ~~0.3 `chore: add env handling (.env.example + loading)`~~ ✅
-
----
-
-## ~~EPIC 1 — UI foundation (Theme + Layout primitives)~~ ✅ COMPLETE
-
-### ~~1.1 `feat(ui): add theme.ts and styles.ts`~~ ✅
-
-### ~~1.2 `feat(ui): wire Home/Practice/PostPractice screens to navigation`~~ ✅
-
-### ~~1.3 `chore(ui): add minimal UI components (Card, ButtonText, Pill)`~~ ✅
-
----
-
-## ~~EPIC 2 — Local DB (SQLite cache) + repos~~ ✅ COMPLETE
-
-### ~~2.1 `feat(data): create SQLite schema incl. sync_state`~~ ✅
-
-### ~~2.2 `feat(data): implement repos (practicesRepo, sessionsRepo, meaningRepo)`~~ ✅
-
-### ~~2.3 `feat(data): seed practices into SQLite on first run`~~ ✅
-
----
-
-## ~~EPIC 3 — "Today's Practice" selection (deterministic)~~ ✅ COMPLETE
-
-### ~~3.1 `feat(domain): deterministic daily practice selection`~~ ✅
-
-**Acceptance:**
-
-* ~~One practice per calendar day~~ ✅
-* ~~Stable within a day~~ ✅
-* ~~Swap once per day (optional if you want this now)~~ ✅
-* ~~No streaks/progress~~ ✅
-
----
-
-## ~~EPIC 4 — Attention Gym flow (real sessions)~~ ✅ COMPLETE
-
-### ~~4.1 `feat(sessions): create PracticeSession on practice start`~~ ✅
-
-**Acceptance:**
-
-* ~~Session row created with `status=started`~~ ✅
-* ~~`started_at` saved~~ ✅
-
-### ~~4.2 `feat(sessions): complete / abandon updates session`~~ ✅
-
-**Acceptance:**
-
-* ~~Finish → `completed_at`, `status=completed`~~ ✅
-* ~~Exit/Back → `status=abandoned`~~ ✅
-* ~~No praise language~~ ✅
-
----
-
-## ~~EPIC 5 — Meaning logging (CRUD, tags, UX)~~ ✅ COMPLETE
-
-### ~~5.1 `feat(entries): implement LogMoment screen with category/text/tags`~~ ✅
-
-**Acceptance:**
-
-* Category required
-* Text optional max 280
-* Tags optional (chip list from comma-separated input is fine)
-* Save writes to SQLite
-
-### ~~5.2 `feat(entries): Entries screen list + edit/delete (soft delete locally)`~~ ✅
-
-**Acceptance:**
-
-* List entries
-* Edit updates `updated_at`
-* Delete sets `deleted_at` (don’t hard delete)
-
----
-
-## ~~EPIC 6 — Map logic (deterministic + testable)~~ ✅ COMPLETE
-
-### ~~6.1 `feat(map): implement mapStats (tag counts + net_meaning)`~~ ✅
-
-**Acceptance:**
-
-* Matches SPEC section 7
-* Deterministic unit tests
-
-### ~~6.2 `feat(map): implement clustering (Jaccard threshold 0.3)`~~ ✅
-
-**Acceptance:**
-
-* Deterministic clusters (max 5)
-* Unit tests with known fixtures
-
-### ~~6.3 `feat(ui): Map screen renders top tags + clusters`~~ ✅
-
-**Acceptance:**
-
-* Neutral language (“shows up”, “tends to”)
-* Tap cluster → Entries filtered view
-
----
-
-## ~~EPIC 7 — Supabase backend setup (schema + seed + RLS)~~ ✅ COMPLETE
-
-### ~~7.1 `chore(backend): apply supabase schema migration (RLS)`~~ ✅
-
-**Acceptance:**
-
-* `0001_init.sql` exists in repo and matches decisions
-* RLS enabled on user tables
-* Practices readable for authenticated users only (recommended)
-
-### ~~7.2 `chore(backend): seed practices into Supabase via migration`~~ ✅
-
-**Acceptance:**
-
-* `0002_seed_practices.sql` exists
-* Idempotent upsert
-* Clients cannot insert/update practices
-
-### ~~7.3 `test(security): verify RLS with two users`~~ ✅
-
-**Acceptance:**
-
-* Documented steps in SECURITY.md
-* Verified user A cannot read/write user B rows
-
----
-
-## EPIC 8 — Auth (Supabase, multi-provider)
-
-### 8.1 ✅ `feat(auth): add supabase client + session persistence`
-
-**Acceptance:**
-
-* `src/data/supabaseClient.ts`
-* Session persists across restart
-* No tokens logged
-
-### 8.2 ✅ `feat(auth-ui): Auth screen + gating`
-
-**Acceptance:**
-
-* Logged out → Auth screen
-* Logged in → App content
-* Logout works
-
-### 8.3 ✅ `feat(auth): Apple sign-in`
-
-**Acceptance:**
-
-* Works on iOS device
-* Redirect returns to app
-* Session stored
-
-### 8.4 ✅ `feat(auth): Google sign-in`
-
-**Acceptance:** end-to-end working
-
-### 8.5 ✅ `feat(auth): Email sign-in (magic link or OTP)`
-
-**Acceptance:** end-to-end working
-
-### 8.6 `feat(auth): Additional provider (Facebook or alternate)`
-
-**Acceptance:** end-to-end working
-*(If provider choice is still open, treat as Facebook by default per DECISIONS.md.)*
-
-### 8.7 ✅ `chore(auth): deep link + redirect URL config`
-
-**Acceptance:**
-
-* `app.json` scheme set (e.g., `margin`)
-* Supabase redirect allowlist documented
-* iOS + Android tested
-
----
-
-## EPIC 9 — Sync (minimal, deterministic, secure)
-
-### 9.1 ✅ `feat(sync): add sync skeleton modules + sync_state repo`
-
-**Acceptance:**
-
-* `src/domain/sync/*` exists (engine + stubs)
-* `sync_state` local table used for `last_sync_at:*`
-
-### 9.2 ✅ `feat(sync): pull remote changes into SQLite (meaning_entries)`
-
-**Acceptance:**
-
-* Fetch rows updated since last sync
-* Upsert local by id
-* Respect `deleted_at`
-
-### 9.3 ✅ `feat(sync): push local changes to Supabase (meaning_entries)`
-
-**Acceptance:**
-
-* Upsert to Supabase
-* Soft delete via `deleted_at`
-* No infinite loops
-
-### 9.4 ✅ `feat(sync): pull/push practice_sessions`
-
-**Acceptance:** same as entries
-
-### 9.5 ✅ `feat(sync): conflict rule (server newer wins by updated_at)`
-
-**Acceptance:**
-
-* Deterministic last-write-wins
-* Tested with simulated timestamps
-
-### 9.6 `feat(sync-ui): Settings “Sync now” + sync on start/foreground`
-
-**Acceptance:**
-
-* Manual sync button
-* Sync triggers don’t spam network
-* Sync safe offline
-
----
-
-## EPIC 10 — Export & release hygiene
-
-### 10.1 ✅ `feat(export): user-initiated JSON export (local cache)`
-
-**Acceptance:** exports practices/sessions/entries from SQLite
-
-### 10.2 ✅ `chore: add basic error boundaries + safe logging`
-
-**Acceptance:**
-
-* No personal text in logs
-* Basic error UI doesn’t add drama
-
----
-
-# Suggested execution order (keeps agents sane)
-
-1. **EPIC 0 → 2 → 4 → 5 → 6** (local-only vertical slice works)
-2. **EPIC 7 → 8** (Supabase + auth)
-3. **EPIC 9** (sync)
-4. **EPIC 10** (export + hardening)
-
----
-
-## One practical “agent prompt” to pin in the repo
-
-Add this to the top of each issue (or in your project board description):
+# Margin App Backlog
 
 > Read `SPEC.md`, `DECISIONS.md`, `AGENTS.md`, `DESIGN.md` first. Implement the smallest change that satisfies acceptance criteria. No streaks, no advice, no ML/LLM, no network dependency in core flow unless the issue is explicitly Auth/Sync.
+
+---
+
+## Completed EPICs (v1 Foundation)
+
+| EPIC | Description | Status |
+|------|-------------|--------|
+| 0 | Agent onboarding & repo health | ✅ |
+| 1 | UI foundation (Theme + Layout) | ✅ |
+| 2 | Local DB (SQLite) + repos | ✅ |
+| 3 | Daily practice selection | ✅ |
+| 4 | Attention Gym sessions | ✅ |
+| 5 | Meaning logging | ✅ |
+| 6 | Map stats & clustering | ✅ |
+| 7 | Supabase backend | ✅ |
+| 8 | Authentication | ✅ |
+| 9 | Sync engine | ✅ |
+| 10 | Export & error boundaries | ✅ |
+| A | Maps v1 (time filter + prominence) | ✅ |
+| B | Daily practice loop | ✅ |
+| C | Logging UX polish | ✅ |
+| D | Reliability & observability | ✅ |
+| E | Security, privacy & exit paths | ✅ |
+| F | Visual & brand integration | ✅ |
+
+---
+
+## EPIC 11 — Auth polish & production readiness
+
+### 11.1 `chore(supabase): enable Apple OAuth provider`
+
+**Acceptance:**
+* Apple Sign-In configured in Supabase Dashboard
+* Apple Developer account configured with Services ID
+* Redirect URL `margin://auth/callback` added to allowed URLs
+* Works in production build
+
+### 11.2 `chore(supabase): enable Google OAuth provider`
+
+**Acceptance:**
+* Google OAuth configured in Supabase Dashboard  
+* Google Cloud Console OAuth 2.0 credentials created
+* Redirect URL `margin://auth/callback` added to allowed URLs
+* Works in production build
+
+### 11.3 `chore(supabase): customise email templates`
+
+**Acceptance:**
+* "Confirm your sign-up" email includes Margin branding
+* Redirect URL points to `margin://auth/callback`
+* Email copy matches app tone (no "fix", "improve", etc.)
+
+### 11.4 `feat(auth): deep link handler for auth callbacks`
+
+**Acceptance:**
+* App handles `margin://auth/callback` deep links
+* Magic link and OAuth callbacks work in production build
+* Linking config in app.json/app.config.js
+
+---
+
+## EPIC G — Found Fragments: Product & Documentation
+
+> Make Found Fragments "real" by documenting intent, constraints, and guardrails.
+
+### G.1 `docs(spec): add Found Fragments section to SPEC.md`
+
+**Acceptance:**
+* New section "Found Fragments" in SPEC.md
+* Defines intent: optional, non-instructional "found notes"
+* Defines constraints: no advice, no streaks, no archive/list, silence is allowed, no repeats per user
+* Defines surfacing: max 1 at a time; disappears after dismiss/next screen; no backlog
+
+### G.2 `docs(notes): add Found Fragments rationale to notes.md`
+
+**Acceptance:**
+* Rationale: why "found notes", why "two-year drip", why "no repeats", why "no endpoint"
+* Aesthetic guidance: parchment/scrap feel, "found in a book"
+
+### G.3 `docs(agents): add fragment-specific guardrails to AGENTS.md`
+
+**Acceptance:**
+* Never prescriptive language
+* Never "you should" / "this will help"
+* No coupling fragments to user data
+* No "journey/progress" UI
+
+### G.4 `docs(domain): create src/domain/fragments/README.md`
+
+**Acceptance:**
+* What the engine does, invariants, where config lives, what gets synced
+* Voice definitions and authoring guidelines (see VOICES section below)
+
+---
+
+## EPIC H — Found Fragments: Supabase Schema & Policies
+
+> Supabase becomes source of truth for fragment catalogue.
+
+### H.1 `feat(supabase): create fragments_catalog table`
+
+**Acceptance:**
+* Table stores canonical fragment definitions (100 rows)
+* Columns: id, voice, text, enabled, created_at, updated_at
+
+### H.2 `feat(supabase): create fragment_reveals table`
+
+**Acceptance:**
+* Stores per-user reveal history
+* Columns: id, user_id, fragment_id, revealed_at
+* Unique constraint on (user_id, fragment_id) — server guarantees "no repeats"
+
+### H.3 `feat(supabase): enable RLS + add policies`
+
+**Acceptance:**
+* fragments_catalog: read-only for authenticated users
+* fragment_reveals: users can read/insert/delete their own rows
+
+### H.4 `chore(supabase): seed fragments_catalog`
+
+**Acceptance:**
+* SQL migration seeds all 100 fragments from fragments.seed.json
+* Idempotent (can be run multiple times safely)
+
+### H.5 `chore(supabase): add indexes for performance`
+
+**Acceptance:**
+* Index on fragment_reveals(user_id, revealed_at)
+
+---
+
+## EPIC I — Found Fragments: Local Cache & Migrations
+
+> Offline-first: cache catalogue locally and record reveals locally first.
+
+### I.1 `feat(db): add local SQLite tables for fragments`
+
+**Acceptance:**
+* fragments_catalog_cache (mirrors Supabase catalog)
+* fragment_reveals_local (local reveal history; synced)
+
+### I.2 `feat(domain): implement cache refresh logic`
+
+**Acceptance:**
+* Download catalog if missing
+* Refresh if remote catalog version changed (simple version field)
+
+---
+
+## EPIC J — Found Fragments: Release Engine (Domain Logic)
+
+> Pure algorithm that decides when/if to reveal a fragment.
+
+### J.1 `feat(content): create fragmentSchedule.seed.json`
+
+**Acceptance:**
+* Algorithm config: min practices, cooldown hours, rolling cap, probability gate
+* Voice weights by age buckets
+
+### J.2 `feat(domain): implement releaseEngine.ts`
+
+**Acceptance:**
+* Pure function with inputs: now, practicesCompleted, firstPracticeAt, lastRevealAt, revealsInLast7Days, unrevealedCountsByVoice
+* Output: either null or { fragmentId }
+* Constraints enforced:
+  - min practices: 3
+  - cooldown: 48h since last reveal
+  - rolling cap: max 2 per 7 days
+  - probability gate per eligible open (~0.18)
+  - voice weighting by age buckets
+
+### J.3 `feat(domain): selection uses only unrevealed fragments`
+
+**Acceptance:**
+* Selection considers local view + remote reconciliation
+* Never selects a fragment already revealed to this user
+
+---
+
+## EPIC K — Found Fragments: Repository & Sync Integration
+
+> Repository layer + sync engine integration.
+
+### K.1 `feat(repo): create fragmentsRepo.ts`
+
+**Acceptance:**
+* `ensureCatalogCached()` — download catalog if needed
+* `getUnrevealedByVoiceCounts()` — count unrevealed fragments per voice
+* `getRecentReveals(days)` — get reveals in last N days
+* `tryRevealNext(now)` — returns fragment (or null)
+* `markRevealed(fragmentId, revealedAt)` — local + enqueue remote
+
+### K.2 `feat(sync): extend sync engine for fragment_reveals`
+
+**Acceptance:**
+* Push local pending reveals
+* Pull remote reveals and merge into local
+
+### K.3 `feat(sync): conflict handling for offline multi-device`
+
+**Acceptance:**
+* If remote insert fails due to unique constraint → treat as "already revealed elsewhere"
+* Ensure fragment won't be shown again locally
+
+---
+
+## EPIC L — Found Fragments: UI Integration
+
+> Surface fragments in the app.
+
+### L.1 `feat(ui): create FoundFragmentCard.tsx`
+
+**Acceptance:**
+* Parchment/scrap aesthetic: warm background, subtle grain, inset margins
+* No labels (voice/type hidden from user)
+* Dismissable
+
+### L.2 `feat(ui): surface fragments on HomeScreen or PostPractice`
+
+**Acceptance:**
+* Show opportunistically when engine returns a fragment
+* No archive / no list — once dismissed, gone
+* Only one fragment visible at a time
+
+### L.3 `feat(settings): add "Show found notes" toggle`
+
+**Acceptance:**
+* Default: on
+* OFF means: don't show, don't backfill later
+
+---
+
+## EPIC M — Found Fragments: Tests
+
+> Ensure correctness and invariants.
+
+### M.1 `test: config validation`
+
+**Acceptance:**
+* Weights sum to 1 per bucket
+
+### M.2 `test: invariants`
+
+**Acceptance:**
+* Never repeat locally
+* Respects cooldown + rolling cap
+* Handles remote uniqueness conflicts
+
+### M.3 `test: seeded RNG tests`
+
+**Acceptance:**
+* Stable outcomes in unit tests with seeded random
+
+---
+
+## Voice Definitions (for EPIC G.4)
+
+The fragment voices represent different perspectives on attention and meaning. They are **not** characters that speak to the user — they are tonal registers that shape how observations are framed.
+
+### The Observer (27 fragments: 15 early + 12 mature)
+
+**Role:** Validates the act of noticing itself. Emphasises that observation is sufficient without extraction, interpretation, or retention.
+
+**Early phase (frag_0001–0015):** Establishes that noticing is enough. Introduces the idea that attention does not demand action.
+
+**Mature phase (frag_0051–0062):** Releases obligation. The user already knows how to look — now they are reminded they don't need to hold onto what they see.
+
+**Guardrails:**
+* Never implies the user should do more
+* Never suggests observation leads to improvement
+* Tone: quiet, present, complete
+
+### The Pattern-Keeper (28 fragments: 15 early + 13 mature)
+
+**Role:** Notices recurrence without assigning meaning or demanding response. Patterns are shapes, not instructions.
+
+**Early phase (frag_0016–0030):** Introduces the idea that repetition exists, can be seen, and does not require explanation.
+
+**Mature phase (frag_0063–0075):** Softens. Patterns dissolve, fade, change. No loyalty is required. Absence is also information.
+
+**Guardrails:**
+* Never suggests patterns should be acted upon
+* Never implies patterns predict or prescribe
+* Tone: structural, unhurried, non-insistent
+
+### The Naturalist (23 fragments: 10 early + 13 mature)
+
+**Role:** Places attention in deep time. The user is participating in something ancient, not performing a personal technique.
+
+**Early phase (frag_0031–0040):** Establishes scale. Attention is older than language, older than memory.
+
+**Mature phase (frag_0076–0088):** Gentler belonging. The user is not late, not separate, not at the centre. Nothing about this needs defending.
+
+**Guardrails:**
+* Never implies the user is special or chosen
+* Never frames attention as achievement
+* Tone: vast, unhurried, ancestral
+
+### The Witness (22 fragments: 10 early + 12 mature)
+
+**Role:** Notices connection and meaning between things. Experience is relational, not isolated.
+
+**Early phase (frag_0041–0050):** Introduces interdependence. What touches you is rarely isolated. Meaning arises between things.
+
+**Mature phase (frag_0089–0100):** Awe matures. The user belongs without needing to be included. Some forms of knowing do not separate subject and object.
+
+**Guardrails:**
+* Never suggests the user should seek connection
+* Never implies loneliness is a problem to solve
+* Tone: relational, open, held
+
+---
+
+## Fragment Authoring Rules (all voices)
+
+1. **Never prescriptive.** Fragments describe, they do not advise.
+2. **Never "you should" / "this will help."** No outcomes promised.
+3. **No coupling to user data.** Fragments do not reference practices completed, entries logged, or time spent.
+4. **No journey/progress framing.** Fragments are moments, not milestones.
+5. **Silence is allowed.** If no fragment is revealed for weeks, that is fine.
+6. **No endpoint.** There is no "final fragment" or completion state.

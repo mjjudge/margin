@@ -91,12 +91,22 @@ function formatArgs(args: unknown[]): unknown[] {
 
 /**
  * Check if we should log at this level
- * In production, we might want to filter debug logs
+ * In production, filter debug logs to reduce noise
  */
-function shouldLog(_level: LogLevel): boolean {
-  // For now, log everything. In production, you might check:
-  // if (__DEV__) return true;
-  // return level !== 'debug';
+function shouldLog(level: LogLevel): boolean {
+  // __DEV__ is a React Native global that is true in development
+  // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+  // @ts-ignore - __DEV__ is a React Native global
+  const isDev = typeof __DEV__ !== 'undefined' ? __DEV__ : true;
+  
+  // Always log errors and warnings
+  if (level === 'error' || level === 'warn') return true;
+  
+  // In production, skip debug and info to reduce log volume
+  if (!isDev && (level === 'debug' || level === 'info')) {
+    return false;
+  }
+  
   return true;
 }
 

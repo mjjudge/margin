@@ -3,6 +3,8 @@
 
 import type { MeaningEntry, MeaningCategory } from '../models';
 
+export type TimeWindow = '7d' | '30d' | 'all';
+
 export interface TagCount {
   tag: string;
   count: number;
@@ -27,6 +29,23 @@ export interface MapStats {
   byCategory: Record<MeaningCategory, number>;
   topTags: TagCount[];
   tagNetMeaning: TagNetMeaning[];
+}
+
+/**
+ * Filter entries by time window
+ * Deterministic: uses created_at timestamp
+ */
+export function filterEntriesByTimeWindow(
+  entries: MeaningEntry[],
+  window: TimeWindow
+): MeaningEntry[] {
+  if (window === 'all') return entries;
+
+  const now = new Date();
+  const days = window === '7d' ? 7 : 30;
+  const cutoff = new Date(now.getTime() - days * 24 * 60 * 60 * 1000);
+
+  return entries.filter(entry => new Date(entry.created_at) >= cutoff);
 }
 
 /**
@@ -145,8 +164,10 @@ export function computeNetMeaning(entries: MeaningEntry[]): TagNetMeaning[] {
 
 /**
  * Compute full map stats from entries
+ * @param entries - All entries to analyze
+ * @param topN - Max number of top tags to return (default 15)
  */
-export function computeMapStats(entries: MeaningEntry[], topN = 10): MapStats {
+export function computeMapStats(entries: MeaningEntry[], topN = 15): MapStats {
   return {
     totalEntries: entries.length,
     byCategory: countByCategory(entries),

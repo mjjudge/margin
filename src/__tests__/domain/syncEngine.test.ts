@@ -21,9 +21,19 @@ jest.mock('../../domain/sync/syncPracticeSessions', () => ({
   syncPracticeSessions: jest.fn(),
 }));
 
+jest.mock('../../domain/sync/syncFragmentsCatalog', () => ({
+  syncFragmentsCatalog: jest.fn(),
+}));
+
+jest.mock('../../domain/sync/syncFragmentReveals', () => ({
+  syncFragmentReveals: jest.fn(),
+}));
+
 import { runFullSync } from '../../domain/sync/syncEngine';
 import { syncMeaningEntries } from '../../domain/sync/syncMeaningEntries';
 import { syncPracticeSessions } from '../../domain/sync/syncPracticeSessions';
+import { syncFragmentsCatalog } from '../../domain/sync/syncFragmentsCatalog';
+import { syncFragmentReveals } from '../../domain/sync/syncFragmentReveals';
 
 describe('syncEngine', () => {
   beforeEach(() => {
@@ -63,14 +73,30 @@ describe('syncEngine', () => {
         errors: [],
       });
 
+      (syncFragmentsCatalog as jest.Mock).mockResolvedValue({
+        table: 'fragments_catalog',
+        pulled: 100,
+        pushed: 0,
+        conflictsResolved: 0,
+        errors: [],
+      });
+
+      (syncFragmentReveals as jest.Mock).mockResolvedValue({
+        table: 'fragment_reveals',
+        pulled: 2,
+        pushed: 1,
+        conflictsResolved: 0,
+        errors: [],
+      });
+
       const result = await runFullSync();
 
       expect(result.success).toBe(true);
-      expect(result.totalPulled).toBe(8);
-      expect(result.totalPushed).toBe(3);
+      expect(result.totalPulled).toBe(110); // 5 + 3 + 100 + 2
+      expect(result.totalPushed).toBe(4); // 2 + 1 + 0 + 1
       expect(result.totalConflicts).toBe(1);
       expect(result.errors).toHaveLength(0);
-      expect(result.results).toHaveLength(2);
+      expect(result.results).toHaveLength(4);
     });
 
     it('aggregates errors from sync functions', async () => {
@@ -92,6 +118,22 @@ describe('syncEngine', () => {
         pushed: 0,
         conflictsResolved: 0,
         errors: ['Timeout'],
+      });
+
+      (syncFragmentsCatalog as jest.Mock).mockResolvedValue({
+        table: 'fragments_catalog',
+        pulled: 0,
+        pushed: 0,
+        conflictsResolved: 0,
+        errors: [],
+      });
+
+      (syncFragmentReveals as jest.Mock).mockResolvedValue({
+        table: 'fragment_reveals',
+        pulled: 0,
+        pushed: 0,
+        conflictsResolved: 0,
+        errors: [],
       });
 
       const result = await runFullSync();

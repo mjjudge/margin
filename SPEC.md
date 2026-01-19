@@ -373,3 +373,92 @@ Social features
 Custom practice authoring UI
 
 These require a separate spec.
+---
+
+## 14. Found Fragments
+
+### 14.1 Intent
+
+Found Fragments are optional, non-instructional "found notes" that appear rarely over roughly two years.
+
+They exist because:
+- The core Margin concept often lands only after gentle exposure
+- Fragments provide a low-pressure narrative "scaffold" without turning the app into coaching, self-help, or optimisation
+
+### 14.2 What Found Fragments are
+
+- Short texts (1–4 lines) that feel "found" rather than delivered
+- Non-instructional observations about attention, patterns, time, and connection
+- Written in four "voices" (tonal registers, not characters): Observer, Pattern-Keeper, Naturalist, Witness
+
+### 14.3 What Found Fragments are NOT
+
+- Advice or guidance
+- Coaching or therapy
+- Progress markers or milestones
+- Coupled to user data (no "you logged X, so here's Y")
+- Completable (there is no "final fragment" or achievement)
+
+### 14.4 Constraints (non-negotiable)
+
+1. **No advice.** Fragments describe; they never prescribe.
+2. **No streaks.** No tracking of fragments seen, no "collect them all".
+3. **No archive/list.** Once dismissed, a fragment is gone. Users cannot browse past fragments.
+4. **Silence is allowed.** If no fragment appears for weeks, that is fine.
+5. **No repeats per user.** A fragment is shown at most once per user, ever.
+6. **No endpoint.** There is no completion state or "you've seen them all" message.
+
+### 14.5 Surfacing rules
+
+- **Maximum 1 fragment visible at a time**
+- **Appears opportunistically** on HomeScreen or PostPracticeScreen
+- **Disappears after dismiss** or navigation away
+- **No backlog** — if conditions aren't met, nothing appears
+- **Release engine constraints:**
+  - Minimum 3 completed practices before first fragment
+  - Cooldown: 48 hours since last reveal
+  - Rolling cap: maximum 2 reveals per 7 days
+  - Probability gate per eligible opportunity (~18%)
+
+### 14.6 Data model
+
+```ts
+Fragment {
+  id: string           // e.g., "frag_0001"
+  voice: 'observer' | 'pattern_keeper' | 'naturalist' | 'witness'
+  text: string         // 1–4 lines, newline-separated
+  enabled: boolean
+  created_at: ISOString
+  updated_at: ISOString
+}
+
+FragmentReveal {
+  id: string
+  user_id: string
+  fragment_id: string
+  revealed_at: ISOString
+}
+```
+
+### 14.7 Architecture
+
+- **Supabase is source of truth** for the fragment catalogue (100 fragments)
+- **Local SQLite cache** mirrors the catalogue for offline access
+- **Reveal history syncs per user** so fragments never repeat across devices
+- **Offline-first:** reveals are recorded locally first, then synced when online
+
+### 14.8 Tone rules for fragment content
+
+Allowed:
+- "This happened"
+- "You noticed"
+- "Patterns form"
+- "Nothing requires"
+
+Disallowed:
+- "You should"
+- "This will help"
+- "Try to"
+- "Remember to"
+- "Improve"
+- "Fix"
