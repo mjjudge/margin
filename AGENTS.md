@@ -156,19 +156,37 @@ If tests are not in place yet, create them as part of the task.
 
 ## 8) Backups, commits, and daily hygiene
 
-### 8.1 Commit discipline
+### 8.1 **MANDATORY: Run backup before ending any session**
+
+Before ending a coding session, **always run the backup script**:
+
+```bash
+npm run backup
+```
+
+This creates timestamped backups in two locations:
+- `~/backups/margin-app/` (local)
+- `/mnt/ssd/backups/margin-app/` (external SSD)
+
+**This is non-negotiable.** Do not wait to be asked. Run the backup proactively at:
+- End of every coding session
+- Before any risky refactor
+- After completing a significant feature
+
+### 8.2 Commit discipline
 - Commit early and often.
 - Prefer small commits with clear messages.
 - If a change spans multiple concerns, split into multiple commits.
 
-### 8.2 Daily backup rule
+### 8.3 Daily backup rule
 At minimum, ensure:
 - Local work is pushed to the remote repository daily, OR
 - A patch file is generated and stored (fallback)
+- **Run `npm run backup` at end of session**
 
 If working in a branch, push the branch daily.
 
-### 8.3 Branching
+### 8.4 Branching
 - Use feature branches: `feat/<short-name>` or `fix/<short-name>`
 - Avoid long-lived branches. Merge frequently.
 

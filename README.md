@@ -283,6 +283,40 @@ Domain tests (like `releaseEngine.test.ts`) should test pure functions without d
 
 ---
 
+## Backups
+
+### Running a backup
+
+```bash
+npm run backup
+```
+
+This creates timestamped `.tar.gz` archives in two locations:
+- `~/backups/margin-app/` (local)
+- `/mnt/ssd/backups/margin-app/` (external SSD)
+
+### What's included
+- All source code
+- Configuration files
+- Documentation
+
+### What's excluded
+- `node_modules/`
+- `.expo/`
+- Build artifacts (`ios/build`, `android/build`)
+- `.git/` history
+- `.env` files (secrets)
+
+### Backup retention
+The script automatically keeps only the last 10 backups in each location.
+
+### When to backup
+- **End of every coding session** (mandatory)
+- Before risky refactors
+- After completing significant features
+
+---
+
 ## Repository structure
 
 /src
