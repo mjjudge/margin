@@ -120,6 +120,169 @@ See `SPEC.md` for canonical implementation details.
 
 ---
 
+## Testing
+
+### Running tests
+
+```bash
+npm test                    # Run all tests in watch mode
+npm test -- --watchAll=false  # Run once (CI mode)
+npm test -- --testNamePattern="pattern"  # Run specific tests
+```
+
+### Test architecture
+
+Tests use Jest with an in-memory mock of `expo-sqlite`. The mock lives in [src/__tests__/setup.ts](src/__tests__/setup.ts) and is configured via `jest.config.js`.
+
+**Key files:**
+- `src/__tests__/setup.ts` - Mock database implementation
+- `src/__tests__/repos/*.test.ts` - Repository tests
+- `src/__tests__/domain/*.test.ts` - Domain logic tests
+- `src/domain/*/___tests__/*.test.ts` - Co-located domain tests
+
+### How the SQLite mock works
+
+The mock maintains in-memory tables as arrays of objects:
+
+```typescript
+const tables: Record<string, Record<string, unknown>[]> = {
+  practices: [],
+  practice_sessions: [],
+  meaning_entries: [],
+  sync_state: [],
+  fragments_catalog_cache: [],
+  fragment_reveals_local: [],
+};
+```
+
+It intercepts `runAsync`, `getFirstAsync`, `getAllAsync`, and `execAsync` calls and simulates SQL operations against these arrays.
+
+### Adding new tables to the mock
+
+1. **Add the table to the tables object** in `setup.ts`:
+   ```typescript
+   const tables = {
+     // ... existing tables
+     my_new_table: [],
+   };
+   ```
+
+2. **Add to the reset function**:
+   ```typescript
+   __resetMock: () => {
+     // ... existing resets
+     tables.my_new_table = [];
+   },
+   ```
+
+3. **Add query handlers if needed** - The mock handles common patterns automatically, but complex queries may need explicit handling in `getAllAsync` or `getFirstAsync`.
+
+### Common gotchas and solutions
+
+#### 1. `INSERT OR REPLACE` vs `INSERT INTO`
+
+The mock checks for `sql.includes('INSERT ')` (with space) to catch both `INSERT INTO` and `INSERT OR REPLACE INTO`. The table extraction regex uses:
+
+```typescript
+const tableMatch = sql.match(/INSERT (?:OR REPLACE )?INTO (\w+)/);
+```
+
+#### 2. Hardcoded values in SQL
+
+When SQL contains hardcoded values like:
+```sql
+VALUES ('my_key', ?)
+-- or
+VALUES (?, ?, ?, ?, 0)
+```
+
+The mock parses both parameterized (`?`) and literal values:
+
+```typescript
+if (valPattern === '?') {
+  row[col] = params[paramIdx++];
+} else if (valPattern.startsWith("'") && valPattern.endsWith("'")) {
+  row[col] = valPattern.slice(1, -1);  // String literal
+} else {
+  row[col] = parseInt(valPattern, 10);  // Numeric literal
+}
+```
+
+#### 3. Unique constraints
+
+To enforce unique constraints in tests, add explicit checks:
+
+```typescript
+if (table === 'fragment_reveals_local' && !sql.includes('OR REPLACE')) {
+  const existing = tables[table].find(r => r.fragment_id === row.fragment_id);
+  if (existing) {
+    throw new Error(`UNIQUE constraint failed: fragment_reveals_local.fragment_id`);
+  }
+}
+```
+
+#### 4. Resetting state between tests
+
+Always call `__resetMock()` in `beforeEach`:
+
+```typescript
+const expoSqlite = jest.requireMock('expo-sqlite') as {
+  __resetMock: () => void;
+};
+
+beforeEach(() => {
+  expoSqlite.__resetMock();
+});
+```
+
+#### 5. Query pattern matching
+
+Add WHERE clause handlers in `getAllAsync` as needed:
+
+```typescript
+if (sql.includes('WHERE synced = 0')) {
+  rows = rows.filter(r => r.synced === 0);
+}
+```
+
+### Writing good repository tests
+
+1. **Test CRUD operations** - create, read, update, delete
+2. **Test edge cases** - empty tables, missing records, duplicates
+3. **Test invariants** - unique constraints, required fields
+4. **Test sync-related methods** - unsynced tracking, merge logic
+
+Example test structure:
+
+```typescript
+describe('myRepo', () => {
+  beforeEach(() => {
+    expoSqlite.__resetMock();
+  });
+
+  it('should create a record', async () => {
+    const record = await myRepo.create({ field: 'value' });
+    expect(record.id).toBeDefined();
+  });
+
+  it('should return null for non-existent record', async () => {
+    const record = await myRepo.getById('non-existent');
+    expect(record).toBeNull();
+  });
+});
+```
+
+### Domain logic tests
+
+Domain tests (like `releaseEngine.test.ts`) should test pure functions without database dependencies:
+
+- Test configuration validation
+- Test deterministic outputs with fixed inputs
+- Test edge cases and boundary conditions
+- Test invariants (e.g., weights sum to 1.0)
+
+---
+
 ## Repository structure
 
 /src
