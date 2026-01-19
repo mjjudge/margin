@@ -101,14 +101,24 @@ export default function SettingsScreen({ navigation }: any) {
 
   return (
     <SafeAreaView style={styles.screen} edges={['top']}>
+      {/* Fixed header with Back button only */}
+      <View style={[
+        styles.content, 
+        { 
+          paddingHorizontal: theme.layout.screenPaddingX,
+          paddingVertical: theme.space.s3,
+          backgroundColor: theme.color.bg,
+          borderBottomWidth: 1,
+          borderBottomColor: theme.color.border,
+        }
+      ]}>
+        <Pressable onPress={() => navigation.goBack()} hitSlop={theme.hit.slop}>
+          <Text style={styles.link}>Back</Text>
+        </Pressable>
+      </View>
+
       <ScrollView style={{ flex: 1 }} contentContainerStyle={{ padding: theme.layout.screenPaddingX }}>
         <View style={styles.content}>
-          <View style={styles.sectionTight}>
-            <Pressable onPress={() => navigation.goBack()} hitSlop={theme.hit.slop}>
-              <Text style={styles.link}>Back</Text>
-            </Pressable>
-          </View>
-
         <View style={styles.section}>
           <Text style={styles.h2}>Settings</Text>
         </View>

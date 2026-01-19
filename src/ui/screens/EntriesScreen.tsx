@@ -179,47 +179,82 @@ export default function EntriesScreen({ route, navigation }: any) {
 
   return (
     <SafeAreaView style={styles.screen} edges={['top']}>
-      <View style={[styles.screenPadded, { paddingTop: 0 }]}>
-        <View style={styles.content}>
-          <View style={styles.sectionTight}>
-            <Pressable onPress={() => navigation.goBack()} hitSlop={theme.hit.slop}>
-              <Text style={styles.link}>Back</Text>
-            </Pressable>
-          </View>
+      {/* Fixed header with Back button only */}
+      <View style={[
+        styles.content, 
+        { 
+          paddingHorizontal: theme.layout.screenPaddingX,
+          paddingVertical: theme.space.s3,
+          backgroundColor: theme.color.bg,
+          borderBottomWidth: 1,
+          borderBottomColor: theme.color.border,
+        }
+      ]}>
+        <Pressable onPress={() => navigation.goBack()} hitSlop={theme.hit.slop}>
+          <Text style={styles.link}>Back</Text>
+        </Pressable>
+      </View>
 
-        <View style={styles.section}>
-          <Text style={styles.h2}>{filterTags ? 'Filtered Entries' : 'Entries'}</Text>
-          <Text style={styles.body2}>
-            {filterTags 
-              ? `Showing entries with: ${filterTags.map(t => `#${t}`).join(', ')}`
-              : "Everything you've logged."}
-          </Text>
-          {filterTags && (
-            <>
-              <Spacer size="s3" />
-              <Button 
-                label="Clear filter" 
-                variant="text" 
-                onPress={() => navigation.setParams({ filterTags: undefined })} 
-              />
-            </>
-          )}
-        </View>
-
+      <View style={[styles.screenPadded, { paddingTop: theme.space.s4, flex: 1 }]}>
+        <View style={[styles.content, { flex: 1 }]}>
         {entries.length === 0 ? (
-          <View style={styles.section}>
-            <Card>
-              <Text style={styles.body2}>{filterTags ? 'No entries match this filter.' : 'No entries yet.'}</Text>
-              <Spacer size="s4" />
-              <Button label="Log a moment" onPress={() => navigation.navigate('LogMoment')} />
-            </Card>
-          </View>
+          <>
+            <View style={styles.section}>
+              <Text style={styles.h2}>
+                {filterTags ? 'Filtered Entries' : 'All Entries'}
+              </Text>
+              <Text style={styles.body2}>
+                {filterTags 
+                  ? `Showing entries with: ${filterTags.map(t => `#${t}`).join(', ')}`
+                  : "Everything you've logged."}
+              </Text>
+              {filterTags && (
+                <>
+                  <Spacer size="s3" />
+                  <Button 
+                    label="Clear filter" 
+                    variant="text" 
+                    onPress={() => navigation.setParams({ filterTags: undefined })} 
+                  />
+                </>
+              )}
+            </View>
+            <View style={styles.section}>
+              <Card>
+                <Text style={styles.body2}>{filterTags ? 'No entries match this filter.' : 'No entries yet.'}</Text>
+                <Spacer size="s4" />
+                <Button label="Log a moment" onPress={() => navigation.navigate('LogMoment')} />
+              </Card>
+            </View>
+          </>
           ) : (
             <FlatList
               data={entries}
               keyExtractor={item => item.id}
               renderItem={renderEntry}
               contentContainerStyle={{ paddingBottom: theme.space.s8 }}
+              ListHeaderComponent={
+                <View style={styles.section}>
+                  <Text style={styles.h2}>
+                    {filterTags ? 'Filtered Entries' : 'All Entries'}
+                  </Text>
+                  <Text style={styles.body2}>
+                    {filterTags 
+                      ? `Showing entries with: ${filterTags.map(t => `#${t}`).join(', ')}`
+                      : "Everything you've logged."}
+                  </Text>
+                  {filterTags && (
+                    <>
+                      <Spacer size="s3" />
+                      <Button 
+                        label="Clear filter" 
+                        variant="text" 
+                        onPress={() => navigation.setParams({ filterTags: undefined })} 
+                      />
+                    </>
+                  )}
+                </View>
+              }
               refreshControl={
                 <RefreshControl
                   refreshing={refreshing}

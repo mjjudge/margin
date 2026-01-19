@@ -27,20 +27,35 @@ export default function SyncStatusScreen({ navigation }: any) {
       const db = await getDb();
       
       // Get sync state and counts for each table
-      const tables: SyncTable[] = ['meaning_entries', 'practice_sessions'];
+      const tables: SyncTable[] = ['meaning_entries', 'practice_sessions', 'fragment_reveals'];
       const info: TableInfo[] = [];
       
       for (const table of tables) {
         const syncState = await getSyncState(table);
         
-        // Get local row count (excluding soft-deleted)
-        const countResult = await db.getFirstAsync<{ count: number }>(
-          `SELECT COUNT(*) as count FROM ${table} WHERE deleted_at IS NULL`
-        );
+        // Get local row count
+        // fragment_reveals_local doesn't have deleted_at, others do
+        let countResult: { count: number } | null;
+        if (table === 'fragment_reveals') {
+          countResult = await db.getFirstAsync<{ count: number }>(
+            'SELECT COUNT(*) as count FROM fragment_reveals_local'
+          );
+        } else {
+          countResult = await db.getFirstAsync<{ count: number }>(
+            `SELECT COUNT(*) as count FROM ${table} WHERE deleted_at IS NULL`
+          );
+        }
+        
+        const displayNames: Record<SyncTable, string> = {
+          meaning_entries: 'Meaning Entries',
+          practice_sessions: 'Practice Sessions',
+          fragment_reveals: 'Fragment Reveals',
+          fragments_catalog: 'Fragments Catalog',
+        };
         
         info.push({
           table,
-          displayName: table === 'meaning_entries' ? 'Entries' : 'Sessions',
+          displayName: displayNames[table],
           lastSyncAt: syncState.lastSyncAt,
           localCount: countResult?.count ?? 0,
         });

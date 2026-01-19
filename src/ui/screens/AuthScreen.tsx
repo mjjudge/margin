@@ -231,6 +231,8 @@ export default function AuthScreen() {
                     borderColor: theme.color.border, 
                     borderRadius: theme.radius.sm,
                     padding: theme.space.s3,
+                    paddingVertical: theme.space.s4,
+                    minHeight: 48,
                   }]}
                   placeholder="you@example.com"
                   placeholderTextColor={theme.color.text3}

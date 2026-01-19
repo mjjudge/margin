@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 import { View, Text, TextInput, Pressable, ScrollView, Alert, KeyboardAvoidingView, Platform } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { styles } from '../styles';
@@ -26,6 +26,7 @@ export default function LogMomentScreen({ route, navigation }: any) {
   const [tagsInput, setTagsInput] = useState(initialTags?.join(', ') ?? '');
   const [saving, setSaving] = useState(false);
   const [existingTags, setExistingTags] = useState<string[]>([]);
+  const scrollViewRef = useRef<ScrollView>(null);
 
   // Load existing tags for suggestions
   useEffect(() => {
@@ -81,25 +82,40 @@ export default function LogMomentScreen({ route, navigation }: any) {
       <KeyboardAvoidingView 
         style={{ flex: 1 }} 
         behavior={Platform.OS === 'ios' ? 'padding' : 'height'}
+        keyboardVerticalOffset={Platform.OS === 'ios' ? 0 : 20}
       >
+        {/* Fixed header with Cancel and Save buttons */}
+        <View style={[
+          styles.content, 
+          { 
+            flexDirection: 'row', 
+            justifyContent: 'space-between', 
+            alignItems: 'center',
+            paddingHorizontal: theme.layout.screenPaddingX,
+            paddingVertical: theme.space.s3,
+            backgroundColor: theme.color.bg,
+            borderBottomWidth: 1,
+            borderBottomColor: theme.color.border,
+          }
+        ]}>
+          <Pressable onPress={() => navigation.goBack()} hitSlop={theme.hit.slop}>
+            <Text style={styles.link}>Cancel</Text>
+          </Pressable>
+          <Pressable onPress={handleSave} disabled={!canSave} hitSlop={theme.hit.slop}>
+            <Text style={[styles.link, !canSave && { opacity: 0.4 }]}>
+              {saving ? 'Saving...' : (isEdit ? 'Update' : 'Save')}
+            </Text>
+          </Pressable>
+        </View>
+
         <ScrollView 
+          ref={scrollViewRef}
           style={{ flex: 1 }} 
-          contentContainerStyle={{ padding: theme.layout.screenPaddingX }}
+          contentContainerStyle={{ padding: theme.layout.screenPaddingX, paddingBottom: theme.space.s10 }}
           keyboardShouldPersistTaps="handled"
+          keyboardDismissMode="interactive"
         >
           <View style={styles.content}>
-            {/* Header with back and save buttons */}
-            <View style={[styles.sectionTight, { flexDirection: 'row', justifyContent: 'space-between', alignItems: 'center' }]}>
-              <Pressable onPress={() => navigation.goBack()} hitSlop={theme.hit.slop}>
-                <Text style={styles.link}>Cancel</Text>
-              </Pressable>
-              <Pressable onPress={handleSave} disabled={!canSave} hitSlop={theme.hit.slop}>
-                <Text style={[styles.link, !canSave && { opacity: 0.4 }]}>
-                  {saving ? 'Saving...' : (isEdit ? 'Update' : 'Save')}
-                </Text>
-              </Pressable>
-            </View>
-
             <View style={styles.section}>
               <Text style={styles.h2}>{isEdit ? 'Edit entry' : 'Log a moment'}</Text>
               <Text style={styles.body2}>What showed up today? Category required, everything else optional.</Text>
@@ -147,6 +163,12 @@ export default function LogMomentScreen({ route, navigation }: any) {
               onChangeText={setText}
               maxLength={280}
               multiline
+              onFocus={() => {
+                // Scroll to ensure the input is visible above keyboard
+                setTimeout(() => {
+                  scrollViewRef.current?.scrollTo({ y: 200, animated: true });
+                }, 100);
+              }}
             />
             <Spacer size="s2" />
             <Text style={styles.hint}>{280 - text.length} characters left</Text>
@@ -187,9 +209,6 @@ export default function LogMomentScreen({ route, navigation }: any) {
             )}
           </Card>
         </View>
-
-            {/* Extra space for keyboard */}
-            <View style={{ height: theme.space.s8 }} />
           </View>
         </ScrollView>
       </KeyboardAvoidingView>
